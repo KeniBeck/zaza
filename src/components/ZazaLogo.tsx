@@ -1,11 +1,13 @@
 interface ZazaLogoProps {
   size?: number
   color?: string
+  gradientEnd?: string
   className?: string
 }
 
-export function ZazaLogo({ size = 138, color = "currentColor", className }: ZazaLogoProps) {
+export function ZazaLogo({ size = 138, color = "currentColor", gradientEnd, className }: ZazaLogoProps) {
   const width = size * (290 / 138)
+  const isGradient = !!gradientEnd
 
   return (
     <svg
@@ -16,7 +18,15 @@ export function ZazaLogo({ size = 138, color = "currentColor", className }: Zaza
       className={className}
       aria-label="zaza logo"
     >
-      <g transform="translate(0, 138) scale(0.1, -0.1)" fill={color} stroke="none">
+      {isGradient && (
+        <defs>
+          <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor={color} />
+            <stop offset="100%" stopColor={gradientEnd} />
+          </linearGradient>
+        </defs>
+      )}
+      <g transform="translate(0, 138) scale(0.1, -0.1)" fill={isGradient ? "url(#logoGrad)" : color} stroke="none">
         <path d="M825 1370 c-4 -6 -3 -16 3 -22 6 -6 12 -6 17 2 4 6 3 16 -3 22 -6 6 -12 6 -17 -2z" />
         <path d="M1892 1288 c5 -15 28 -18 29 -3 0 6 -7 12 -17 13 -10 3 -15 -1 -12 -10z" />
         <path d="M656 1233 c-77 -93 -158 -165 -217 -193 -106 -50 -175 -49 -316 4 -53 20 -86 9 -108 -34 -25 -48 -12 -103 35 -150 43 -43 83 -55 159 -48 72 7 134 44 245 147 119 110 138 124 160 115 23 -9 20 -68 -5 -123 -29 -64 -74 -118 -238 -281 -164 -164 -235 -251 -289 -359 -34 -68 -37 -81 -37 -162 0 -79 2 -90 24 -113 19 -20 34 -26 65 -26 132 0 301 171 451 455 59 110 91 155 112 155 13 0 15 -9 11 -45 -8 -65 -62 -171 -171 -332 -98 -147 -116 -187 -97 -222 14 -27 29 -26 76 5 81 54 137 141 188 295 48 143 66 241 66 351 0 124 -24 169 -83 154 -43 -10 -94 -73 -185 -226 -47 -80 -102 -162 -122 -182 -62 -62 -112 -45 -95 32 13 58 91 158 244 310 168 168 211 227 237 329 37 148 -31 238 -110 144z" />
