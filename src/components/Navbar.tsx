@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { ZazaLogo } from "./ZazaLogo"
 import { WHATSAPP_URL } from "../constants"
 
@@ -13,25 +13,59 @@ interface NavbarProps {
   borderColor?: string
 }
 
-export function Navbar({ borderColor = "#6B318B" }: NavbarProps) {
+export function Navbar({ borderColor = "#722f96" }: NavbarProps) {
   const [open, setOpen] = useState(false)
+  const [activeSection, setActiveSection] = useState("inicio")
+
+  useEffect(() => {
+    const elements = NAV_LINKS
+      .map(l => document.getElementById(l.href.slice(1)))
+      .filter((el): el is HTMLElement => el !== null)
+
+    if (elements.length === 0) return
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        let bestId = ""
+        let bestRatio = 0
+        for (const entry of entries) {
+          if (entry.intersectionRatio > bestRatio) {
+            bestRatio = entry.intersectionRatio
+            bestId = entry.target.id
+          }
+        }
+        if (bestId) setActiveSection(bestId)
+      },
+      { threshold: [0.2, 0.4, 0.6, 0.8] }
+    )
+
+    elements.forEach(el => observer.observe(el))
+    return () => observer.disconnect()
+  }, [])
 
   return (
     <nav className="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[90%] max-w-5xl">
       <div className="relative flex items-center justify-between px-5 py-3 bg-white/70 backdrop-blur-md rounded-2xl shadow-sm border border-white/20 overflow-hidden">
         <ZazaLogo size={36} color="#6B318B" gradientEnd="#A03B90" className="select-none" />
 
-        <ul className="hidden md:flex items-center gap-8">
-          {NAV_LINKS.map((link) => (
-            <li key={link.href}>
-              <a
-                href={link.href}
-                className="text-sm font-medium text-gray-600 hover:text-[#6B318B] transition-colors"
-              >
-                {link.label}
-              </a>
-            </li>
-          ))}
+        <ul className="hidden md:flex items-center gap-1">
+          {NAV_LINKS.map((link) => {
+            const isActive = activeSection === link.href.slice(1)
+            return (
+              <li key={link.href}>
+                <a
+                  href={link.href}
+                  className={`px-4 py-2 text-sm font-medium rounded-xl transition-all ${
+                    isActive
+                      ? "text-white bg-gradient-to-r from-[#722f96] to-[#A03B90] shadow-sm"
+                      : "text-gray-600 hover:text-[#6B318B] hover:bg-[#6B318B]/5"
+                  }`}
+                >
+                  {link.label}
+                </a>
+              </li>
+            )
+          })}
         </ul>
 
         <div className="flex items-center gap-3">
@@ -77,17 +111,24 @@ export function Navbar({ borderColor = "#6B318B" }: NavbarProps) {
       {open && (
         <div className="mt-2 px-5 py-4 bg-white/70 backdrop-blur-md rounded-2xl shadow-sm border border-white/20 md:hidden">
           <ul className="flex flex-col gap-4">
-            {NAV_LINKS.map((link) => (
-              <li key={link.href}>
-                <a
-                  href={link.href}
-                  onClick={() => setOpen(false)}
-                  className="block text-sm font-medium text-gray-600 hover:text-[#6B318B] transition-colors"
-                >
-                  {link.label}
-                </a>
-              </li>
-            ))}
+            {NAV_LINKS.map((link) => {
+              const isActive = activeSection === link.href.slice(1)
+              return (
+                <li key={link.href}>
+                  <a
+                    href={link.href}
+                    onClick={() => setOpen(false)}
+                    className={`block text-sm font-medium transition-colors ${
+                      isActive
+                        ? "text-[#6B318B] font-semibold"
+                        : "text-gray-600 hover:text-[#6B318B]"
+                    }`}
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              )
+            })}
           </ul>
 
           <a

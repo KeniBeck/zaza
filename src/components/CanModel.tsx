@@ -6,12 +6,12 @@ import * as THREE from "three"
 const START_Y = 0.3
 const FINAL_Y = 0.3
 const DURATION = 0.8
-const MODEL_SCALE = 0.006
+const MODEL_SCALE = 0.010
 const TRANSITION_RANGE = 600
 const HERO_X_START = 0.011
-const HERO_X_END = -0.6
-const HERO_Y_START = 0.3
-const HERO_Y_END = 0.1
+const HERO_X_END = -2.0
+const HERO_Y_START = -0.01
+const HERO_Y_END = -0.3
 const CARD_X = -1.5
 const CARD_Y = -0.1
 

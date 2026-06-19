@@ -1,1 +1,47 @@
 @import "tailwindcss";
+
+@font-face {
+  font-family: "Brusher";
+  src: url("/fonts/Brick-BF64a7c7813c8ac.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@keyframes text-shimmer {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+@keyframes loader-shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(200%); }
+}
+
+@keyframes spin-slow {
+  to { transform: rotate(360deg); }
+}
+
+#scene-canvas,
+#scene-canvas * {
+  pointer-events: none !important;
+}
+
+@property --angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes rotateBorder {
+  to { --angle: 360deg; }
+}
+
+.snake-rotate {
+  animation: rotateBorder 3s linear infinite;
+}
+
+@theme {
+  --font-zaza: "Brusher", sans-serif;
+  --animate-text-shimmer: text-shimmer 4s ease-in-out infinite;
+  --animate-spin-slow: spin-slow 4s linear infinite;
+}
