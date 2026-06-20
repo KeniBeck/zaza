@@ -34,7 +34,11 @@ export function FlavorCard({ flavor, isFirst, onFirstCardRef }: FlavorCardProps)
     >
       <h3
         className="text-3xl font-zaza text-center"
-        style={{ color: isMobile ? "#FFFFFF" : flavor.color }}
+        style={{
+          color: '#fff',
+          textShadow: `0 0 8px ${flavor.color}, 0 0 20px ${flavor.color}, 0 0 40px ${flavor.color}`,
+          WebkitTextStroke: `1px ${flavor.color}`,
+        }}
       >
         {flavor.name}
       </h3>

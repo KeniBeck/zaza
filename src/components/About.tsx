@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react"
 import { WHATSAPP_URL, asset } from "../constants";
 import { ZazaLogo } from "./ZazaLogo";
 
@@ -6,19 +7,61 @@ interface AboutProps {
   gradientStart?: string
   gradientMid?: string
   gradientEnd?: string
+  activeFlavorIndex?: number
 }
 
 export function About({
-  borderColor = "#6B318B",
+  borderColor: _borderColor,
   gradientStart = "#6B318B",
   gradientMid = "#A855F7",
   gradientEnd = "#C084FC",
+  activeFlavorIndex = 0,
 }: AboutProps) {
+    const hexToRgb = (hex: string): string => {
+      const c = hex.replace('#', '')
+      if (c.length !== 6) return '255,255,255'
+      return `${parseInt(c.substring(0,2),16)},${parseInt(c.substring(2,4),16)},${parseInt(c.substring(4,6),16)}`
+    }
+    const blobRgb = hexToRgb(gradientStart)
+    const blobMidRgb = hexToRgb(gradientMid)
+    const blobEndRgb = hexToRgb(gradientEnd)
+    const aboutBg = `linear-gradient(180deg, ${gradientStart}20 0%, ${gradientMid}15 50%, ${gradientEnd}20 100%)`
+    const [bgLayers, setBgLayers] = useState([aboutBg, aboutBg])
+    const [activeBgLayer, setActiveBgLayer] = useState(0)
+    const isMobile = window.innerWidth < 768
+
+    useEffect(() => {
+      const nextLayer = activeBgLayer === 0 ? 1 : 0
+      setBgLayers(prev => {
+        const next = [...prev]
+        next[nextLayer] = aboutBg
+        return next
+      })
+      setActiveBgLayer(nextLayer)
+    }, [activeFlavorIndex])
+
     return (
         <div className="relative min-h-screen w-full flex flex-col items-center pt-[25vh] overflow-hidden">
 
-            {/* ── FONDO: blobs + burbujas estilo splash morado ── */}
+            {/* ── FONDO: crossfade + blobs + burbujas ── */}
             <div className="absolute inset-0 -z-10 pointer-events-none">
+                {/* Crossfade gradient layers */}
+                <div className="absolute inset-0 transition-opacity duration-[800ms] ease" style={{ background: bgLayers[0], opacity: activeBgLayer === 0 ? 1 : 0 }} />
+                <div className="absolute inset-0 transition-opacity duration-[800ms] ease" style={{ background: bgLayers[1], opacity: activeBgLayer === 1 ? 1 : 0 }} />
+
+                {/* Lava blobs */}
+                <div
+                    className="lava-blob about-lava-1"
+                    style={{ backgroundColor: `rgba(${blobRgb},${isMobile ? 0.65 : 0.30})` }}
+                />
+                <div
+                    className="lava-blob about-lava-2"
+                    style={{ backgroundColor: `rgba(${blobMidRgb},${isMobile ? 0.55 : 0.25})` }}
+                />
+                <div
+                    className="lava-blob about-lava-3"
+                    style={{ backgroundColor: `rgba(${blobEndRgb},${isMobile ? 0.50 : 0.20})` }}
+                />
 
                 {/* Blob grande central morado */}
                 <div
@@ -33,7 +76,7 @@ export function About({
                         transform: "translateX(-50%)",
                         background: `radial-gradient(ellipse at 50% 40%, ${gradientStart}99 0%, ${gradientMid}66 40%, transparent 70%)`,
                         borderRadius: "60% 40% 55% 45% / 50% 60% 40% 50%",
-                        filter: "blur(40px)",
+                        filter: "blur(30px)",
                         transition: "background 0.5s ease",
                     }}
                 />
@@ -50,7 +93,7 @@ export function About({
                         left: "-5%",
                         background: `radial-gradient(ellipse, ${gradientEnd}66 0%, transparent 70%)`,
                         borderRadius: "70% 30% 60% 40% / 40% 60% 40% 60%",
-                        filter: "blur(35px)",
+                        filter: "blur(25px)",
                         transition: "background 0.5s ease",
                     }}
                 />
@@ -67,7 +110,7 @@ export function About({
                         right: "-3%",
                         background: `radial-gradient(ellipse, ${gradientMid}55 0%, transparent 70%)`,
                         borderRadius: "40% 60% 30% 70% / 60% 40% 60% 40%",
-                        filter: "blur(30px)",
+                        filter: "blur(20px)",
                         transition: "background 0.5s ease",
                     }}
                 />
@@ -85,7 +128,7 @@ export function About({
                         transform: "translateX(-50%)",
                         background: `radial-gradient(ellipse at 50% 60%, ${gradientStart}88 0%, ${gradientMid}55 40%, transparent 70%)`,
                         borderRadius: "50% 50% 40% 60% / 60% 40% 60% 40%",
-                        filter: "blur(45px)",
+                        filter: "blur(35px)",
                         transition: "background 0.5s ease",
                     }}
                 />
@@ -147,8 +190,8 @@ export function About({
             <div className="mt-6 md:mt-0 w-full flex justify-center">
                 <ZazaLogo
                     size={280}
-                    color="#6B318B"
-                    gradientEnd="#A03B90"
+                    color={gradientStart}
+                    gradientEnd={gradientEnd}
                     className="select-none pointer-events-none w-full max-w-[320px] h-auto lg:w-auto lg:max-w-none"
                 />
             </div>
@@ -163,7 +206,7 @@ export function About({
                     <div
                         className="absolute -inset-0.5 rounded-xl opacity-60 group-hover:opacity-100 transition-opacity duration-500 animate-spin-slow"
                         style={{
-                            background: `conic-gradient(from 0deg, transparent 10deg, ${gradientEnd}cc 30deg, ${gradientMid}cc 50deg, #fff 70deg, ${borderColor}cc 90deg, transparent 110deg, transparent 360deg)`,
+                            background: `conic-gradient(from 0deg, transparent 10deg, ${gradientEnd}cc 30deg, ${gradientMid}cc 50deg, #fff 70deg, ${gradientStart}cc 90deg, transparent 110deg, transparent 360deg)`,
                         }}
                     />
                     <div className="relative m-[2px] rounded-[10px] bg-[#F3E8FF] group-hover:bg-white/20 group-hover:backdrop-blur-md transition-all duration-300">

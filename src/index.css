@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "./css/lava-blobs.css";
 
 @font-face {
   font-family: "Brusher";
