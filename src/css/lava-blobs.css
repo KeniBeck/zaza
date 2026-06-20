@@ -24,25 +24,28 @@
 .lava-blob {
   position: absolute;
   border-radius: 50%;
-  aspect-ratio: 1;
+  overflow: hidden;
   transition: background-color 0.8s ease;
 }
 
 /* Sabores blobs */
 .sabores-lava-1 {
-  width: 80vw; max-width: 650px;
+  width: 80vw; height: 80vw;
+  max-width: 650px; max-height: 650px;
   top: 0%; left: 5%;
   filter: blur(14px);
   animation: lava-1 18s ease-in-out infinite, lava-pulse 5s ease-in-out infinite;
 }
 .sabores-lava-2 {
-  width: 70vw; max-width: 560px;
+  width: 70vw; height: 70vw;
+  max-width: 560px; max-height: 560px;
   top: 15%; right: 0%;
   filter: blur(12px);
   animation: lava-2 14s ease-in-out infinite 3s, lava-pulse 6s ease-in-out infinite 1s;
 }
 .sabores-lava-3 {
-  width: 75vw; max-width: 600px;
+  width: 75vw; height: 75vw;
+  max-width: 600px; max-height: 600px;
   bottom: 5%; left: 15%;
   filter: blur(11px);
   animation: lava-3 11s ease-in-out infinite 5s, lava-pulse 4s ease-in-out infinite 2s;
@@ -50,30 +53,33 @@
 
 /* About blobs */
 .about-lava-1 {
-  width: 70vw; max-width: 650px;
+  width: 70vw; height: 70vw;
+  max-width: 650px; max-height: 650px;
   top: 5%; left: 10%;
   filter: blur(14px);
   animation: lava-1 18s ease-in-out infinite, lava-pulse 5s ease-in-out infinite;
 }
 .about-lava-2 {
-  width: 60vw; max-width: 550px;
+  width: 60vw; height: 60vw;
+  max-width: 550px; max-height: 550px;
   top: 20%; right: 2%;
   filter: blur(12px);
   animation: lava-2 14s ease-in-out infinite 2s, lava-pulse 6s ease-in-out infinite 1s;
 }
 .about-lava-3 {
-  width: 65vw; max-width: 600px;
+  width: 65vw; height: 65vw;
+  max-width: 600px; max-height: 600px;
   bottom: 2%; left: 20%;
   filter: blur(11px);
   animation: lava-3 11s ease-in-out infinite 4s, lava-pulse 4s ease-in-out infinite 2s;
 }
 
 @media (min-width: 768px) {
-  .sabores-lava-1 { width: 50vw; max-width: 420px; left: 2%; }
-  .sabores-lava-2 { width: 42vw; max-width: 360px; top: 20%; right: 5%; }
-  .sabores-lava-3 { width: 45vw; max-width: 380px; bottom: 10%; left: 20%; }
+  .sabores-lava-1 { width: 50vw; height: 50vw; max-width: 420px; max-height: 420px; left: 2%; }
+  .sabores-lava-2 { width: 42vw; height: 42vw; max-width: 360px; max-height: 360px; top: 20%; right: 5%; }
+  .sabores-lava-3 { width: 45vw; height: 45vw; max-width: 380px; max-height: 380px; bottom: 10%; left: 20%; }
 
-  .about-lava-1 { width: 42vw; max-width: 380px; left: 5%; }
-  .about-lava-2 { width: 36vw; max-width: 340px; top: 25%; right: 6%; }
-  .about-lava-3 { width: 38vw; max-width: 350px; bottom: 10%; left: 22%; }
+  .about-lava-1 { width: 42vw; height: 42vw; max-width: 380px; max-height: 380px; left: 5%; }
+  .about-lava-2 { width: 36vw; height: 36vw; max-width: 340px; max-height: 340px; top: 25%; right: 6%; }
+  .about-lava-3 { width: 38vw; height: 38vw; max-width: 350px; max-height: 350px; bottom: 10%; left: 22%; }
 }
