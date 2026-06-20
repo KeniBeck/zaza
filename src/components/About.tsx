@@ -2,25 +2,39 @@ import { useState, useEffect } from "react"
 import { WHATSAPP_URL, asset } from "../constants";
 import { ZazaLogo } from "./ZazaLogo";
 
+function smoothScrollTo(targetY: number, duration: number) {
+    const startY = window.scrollY
+    const distance = targetY - startY
+    const startTime = performance.now()
+    function step(currentTime: number) {
+        const elapsed = currentTime - startTime
+        const progress = Math.min(elapsed / duration, 1)
+        const ease = 1 - Math.pow(1 - progress, 3)
+        window.scrollTo(0, startY + distance * ease)
+        if (progress < 1) requestAnimationFrame(step)
+    }
+    requestAnimationFrame(step)
+}
+
 interface AboutProps {
-  borderColor?: string
-  gradientStart?: string
-  gradientMid?: string
-  gradientEnd?: string
-  activeFlavorIndex?: number
+    borderColor?: string
+    gradientStart?: string
+    gradientMid?: string
+    gradientEnd?: string
+    activeFlavorIndex?: number
 }
 
 export function About({
-  borderColor: _borderColor,
-  gradientStart = "#6B318B",
-  gradientMid = "#A855F7",
-  gradientEnd = "#C084FC",
-  activeFlavorIndex = 0,
+    borderColor: _borderColor,
+    gradientStart = "#6B318B",
+    gradientMid = "#A855F7",
+    gradientEnd = "#C084FC",
+    activeFlavorIndex = 0,
 }: AboutProps) {
     const hexToRgb = (hex: string): string => {
-      const c = hex.replace('#', '')
-      if (c.length !== 6) return '255,255,255'
-      return `${parseInt(c.substring(0,2),16)},${parseInt(c.substring(2,4),16)},${parseInt(c.substring(4,6),16)}`
+        const c = hex.replace('#', '')
+        if (c.length !== 6) return '255,255,255'
+        return `${parseInt(c.substring(0, 2), 16)},${parseInt(c.substring(2, 4), 16)},${parseInt(c.substring(4, 6), 16)}`
     }
     const blobRgb = hexToRgb(gradientStart)
     const blobMidRgb = hexToRgb(gradientMid)
@@ -31,13 +45,13 @@ export function About({
     const isMobile = window.innerWidth < 768
 
     useEffect(() => {
-      const nextLayer = activeBgLayer === 0 ? 1 : 0
-      setBgLayers(prev => {
-        const next = [...prev]
-        next[nextLayer] = aboutBg
-        return next
-      })
-      setActiveBgLayer(nextLayer)
+        const nextLayer = activeBgLayer === 0 ? 1 : 0
+        setBgLayers(prev => {
+            const next = [...prev]
+            next[nextLayer] = aboutBg
+            return next
+        })
+        setActiveBgLayer(nextLayer)
     }, [activeFlavorIndex])
 
     return (
@@ -152,19 +166,19 @@ export function About({
                     <circle cx="820" cy="480" r="25" fill={`${gradientStart}20`} />
 
                     {/* Burbujas pequeñas */}
-                    <circle cx="60"  cy="320" r="8"  fill={`${gradientEnd}40`} />
+                    <circle cx="60" cy="320" r="8" fill={`${gradientEnd}40`} />
                     <circle cx="940" cy="400" r="10" fill={`${gradientMid}40`} />
-                    <circle cx="320" cy="680" r="6"  fill={`${gradientStart}40`} />
-                    <circle cx="700" cy="120" r="9"  fill={`${gradientEnd}35`} />
-                    <circle cx="150" cy="420" r="5"  fill={`${gradientStart}44`} />
-                    <circle cx="860" cy="600" r="7"  fill={`${gradientMid}35`} />
-                    <circle cx="480" cy="720" r="5"  fill={`${gradientStart}30`} />
+                    <circle cx="320" cy="680" r="6" fill={`${gradientStart}40`} />
+                    <circle cx="700" cy="120" r="9" fill={`${gradientEnd}35`} />
+                    <circle cx="150" cy="420" r="5" fill={`${gradientStart}44`} />
+                    <circle cx="860" cy="600" r="7" fill={`${gradientMid}35`} />
+                    <circle cx="480" cy="720" r="5" fill={`${gradientStart}30`} />
 
                     {/* Burbujas medianas (antes gotitas ovaladas) */}
-                    <circle cx="90"  cy="500" r="7"  fill={`${gradientStart}44`} />
-                    <circle cx="920" cy="300" r="6"  fill={`${gradientMid}35`} />
-                    <circle cx="750" cy="650" r="8"  fill={`${gradientEnd}35`} />
-                    <circle cx="250" cy="150" r="5"  fill={`${gradientStart}35`} />
+                    <circle cx="90" cy="500" r="7" fill={`${gradientStart}44`} />
+                    <circle cx="920" cy="300" r="6" fill={`${gradientMid}35`} />
+                    <circle cx="750" cy="650" r="8" fill={`${gradientEnd}35`} />
+                    <circle cx="250" cy="150" r="5" fill={`${gradientStart}35`} />
 
                     {/* Destellos */}
                     <circle cx="350" cy="200" r="3" fill={`${gradientEnd}bb`} />
@@ -216,6 +230,11 @@ export function About({
                             style={{ color: gradientStart }}
                             onMouseEnter={(e) => e.currentTarget.style.color = gradientStart}
                             onMouseLeave={(e) => e.currentTarget.style.color = gradientStart}
+                            onClick={(e) => {
+                                e.preventDefault()
+                                const el = document.getElementById('productos')
+                                if (el) smoothScrollTo(el.getBoundingClientRect().top + window.scrollY, 1000)
+                            }}
                         >
                             Ver sabores
                         </a>
