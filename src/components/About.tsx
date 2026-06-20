@@ -38,7 +38,6 @@ export function About({
     }
     const blobRgb = hexToRgb(gradientStart)
     const blobMidRgb = hexToRgb(gradientMid)
-    const blobEndRgb = hexToRgb(gradientEnd)
     const aboutBg = `linear-gradient(180deg, ${gradientStart}20 0%, ${gradientMid}15 50%, ${gradientEnd}20 100%)`
     const [bgLayers, setBgLayers] = useState([aboutBg, aboutBg])
     const [activeBgLayer, setActiveBgLayer] = useState(0)
