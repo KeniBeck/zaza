@@ -1,56 +1,124 @@
-import { Suspense, useState, useMemo, useCallback, useEffect } from "react"
+import { Suspense, useState, useMemo, useCallback, useEffect, useRef } from "react"
 import { Canvas } from "@react-three/fiber"
+import { useGLTF } from "@react-three/drei"
 import { Scene } from "../components/Scene"
+import { ErrorBoundary } from "../components/ErrorBoundary"
 import { Navbar } from "../components/Navbar"
 import { About } from "../components/About"
 import { Sabores } from "../components/Sabores"
+import { ZazaLogo } from "../components/ZazaLogo"
+import { FLAVORS } from "../data/flavors"
+
+useGLTF.preload("/textura-morada.glb")
+useGLTF.preload("/textura-azul.glb")
 
 interface HomeProps {
   bgColor?: string
 }
 
+function Preloader({ onReady }: { onReady: () => void }) {
+  useGLTF("/textura-morada.glb")
+  useGLTF("/textura-azul.glb")
+
+  useEffect(() => { onReady() }, [onReady])
+
+  return null
+}
+
+function LoadingSplash() {
+  return (
+    <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#F3E8FF]">
+      <ZazaLogo
+        size={160}
+        color="#6B318B"
+        gradientEnd="#A03B90"
+        className="select-none pointer-events-none"
+      />
+      <div className="mt-10 h-1 w-24 rounded-full bg-gradient-to-r from-[#6B318B] via-[#C084FC] to-[#6B318B] animate-pulse" />
+    </div>
+  )
+}
+
 export function Home({ bgColor = "#F3E8FF" }: HomeProps) {
-  const [scrollY, setScrollY] = useState(0)
+  const scrollYRef = useRef(0)
   const [firstCardEl, setFirstCardEl] = useState<HTMLElement | null>(null)
+  const [modelReady, setModelReady] = useState(false)
+  const [canvasKey, setCanvasKey] = useState(0)
+  const retried = useRef(false)
+  const [activeFlavorIndex, setActiveFlavorIndex] = useState(0)
+  const activeFlavor = FLAVORS[activeFlavorIndex]
 
   const heroThreshold = useMemo(() => window.innerHeight, [])
 
   useEffect(() => {
-    const handleScroll = () => setScrollY(window.scrollY)
+    const handleScroll = () => { scrollYRef.current = window.scrollY }
     window.addEventListener("scroll", handleScroll, { passive: true })
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
+
+  const isMobile = window.innerWidth < 768
 
   const handleFirstCardReady = useCallback((el: HTMLElement | null) => {
     setFirstCardEl(el)
   }, [])
 
+  const handleCanvasError = useCallback(() => {
+    if (!retried.current) {
+      retried.current = true
+      setCanvasKey((k) => k + 1)
+    }
+  }, [])
+
+  if (!modelReady) {
+    return (
+      <>
+        <Suspense fallback={null}>
+          <Preloader onReady={() => setModelReady(true)} />
+        </Suspense>
+        <LoadingSplash />
+      </>
+    )
+  }
+
   return (
     <div className="relative w-full" style={{ backgroundColor: bgColor }}>
-      <Navbar />
+      <Navbar color={activeFlavor.color} gradientEnd={activeFlavor.gradientEnd} />
 
-      <div id="scene-canvas" className="fixed inset-0 z-40 pointer-events-none">
-        <Canvas
-          camera={{ position: [0, 0.05, 4], fov: 45 }}
-          gl={{ alpha: true, antialias: true }}
-          dpr={[1, 2]}
-          style={{ pointerEvents: "none" }}
-        >
-          <Suspense fallback={null}>
+      <ErrorBoundary key={canvasKey} onError={handleCanvasError}>
+        <div id="scene-canvas" className="fixed inset-0 z-40 pointer-events-none">
+          <Canvas
+            key={canvasKey}
+            camera={{ position: [0, 0.05, 4], fov: 45 }}
+            gl={{ alpha: true, antialias: !isMobile, powerPreference: "high-performance" }}
+            dpr={isMobile ? 1 : [1, 1.5]}
+            style={{ pointerEvents: "none" }}
+            onCreated={(state) => {
+              state.gl.setClearColor(0x000000, 0)
+            }}
+          >
             <Scene
-              scrollY={scrollY}
+              scrollYRef={scrollYRef}
               heroThreshold={heroThreshold}
               firstCardEl={firstCardEl}
+              glbUrl={activeFlavor.glb}
             />
-          </Suspense>
-        </Canvas>
-      </div>
+          </Canvas>
+        </div>
+      </ErrorBoundary>
 
       <div className="relative z-10">
         <section id="inicio" className="min-h-screen flex flex-col items-center">
-          <About />
+          <About
+            gradientStart={activeFlavor.color}
+            gradientMid={activeFlavor.gradientMid}
+            gradientEnd={activeFlavor.gradientEnd}
+          />
         </section>
-        <Sabores onFirstCardReady={handleFirstCardReady} />
+        <Sabores
+          onFirstCardReady={handleFirstCardReady}
+          activeFlavorIndex={activeFlavorIndex}
+          setActiveFlavorIndex={setActiveFlavorIndex}
+        />
       </div>
     </div>
   )

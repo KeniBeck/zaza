@@ -1,16 +1,17 @@
-import { useRef, useMemo } from "react"
+import { useRef, useMemo, Suspense } from "react"
 import { useThree } from "@react-three/fiber"
 import { Environment } from "@react-three/drei"
 import { CanModel } from "./CanModel"
 import * as THREE from "three"
 
 interface SceneProps {
-  scrollY?: number
+  scrollYRef?: React.MutableRefObject<number>
   heroThreshold?: number
   firstCardEl?: HTMLElement | null
+  glbUrl?: string
 }
 
-export function Scene({ scrollY = 0, heroThreshold = 0, firstCardEl = null }: SceneProps) {
+export function Scene({ scrollYRef, heroThreshold = 0, firstCardEl = null, glbUrl }: SceneProps) {
   const camera = useThree((s) => s.camera)
   const raycaster = useRef(new THREE.Raycaster())
   const mouse = useRef(new THREE.Vector2())
@@ -28,19 +29,20 @@ export function Scene({ scrollY = 0, heroThreshold = 0, firstCardEl = null }: Sc
     raycaster.current.ray.intersectPlane(plane, pt)
     pt.x = -4.0
     return pt
-  }, [firstCardEl, scrollY, camera, plane])
+  }, [firstCardEl, camera, plane])
 
   return (
-    <>
+    <Suspense fallback={null}>
       <ambientLight intensity={0.1} />
       <directionalLight position={[5, 8, 6]} intensity={0.1} />
       <Environment preset="studio" environmentIntensity={1.8} />
 
       <CanModel
-        scrollY={scrollY}
+        scrollYRef={scrollYRef}
         heroThreshold={heroThreshold}
         targetPosition={targetPosition}
+        glbUrl={glbUrl}
       />
-    </>
+    </Suspense>
   )
 }

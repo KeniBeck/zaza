@@ -11,9 +11,11 @@ const NAV_LINKS = [
 
 interface NavbarProps {
   borderColor?: string
+  color?: string
+  gradientEnd?: string
 }
 
-export function Navbar({ borderColor = "#722f96" }: NavbarProps) {
+export function Navbar({ borderColor = "#722f96", color = "#6B318B", gradientEnd = "#A03B90" }: NavbarProps) {
   const [open, setOpen] = useState(false)
   const [activeSection, setActiveSection] = useState("inicio")
 
@@ -46,7 +48,7 @@ export function Navbar({ borderColor = "#722f96" }: NavbarProps) {
   return (
     <nav className="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[90%] max-w-5xl">
       <div className="relative flex items-center justify-between px-5 py-3 bg-white/70 backdrop-blur-md rounded-2xl shadow-sm border border-white/20 overflow-hidden">
-        <ZazaLogo size={36} color="#6B318B" gradientEnd="#A03B90" className="select-none" />
+        <ZazaLogo size={36} color={color} gradientEnd={gradientEnd} className="select-none" />
 
         <ul className="hidden md:flex items-center gap-1">
           {NAV_LINKS.map((link) => {
@@ -55,11 +57,24 @@ export function Navbar({ borderColor = "#722f96" }: NavbarProps) {
               <li key={link.href}>
                 <a
                   href={link.href}
-                  className={`px-4 py-2 text-sm font-medium rounded-xl transition-all ${
-                    isActive
-                      ? "text-white bg-gradient-to-r from-[#722f96] to-[#A03B90] shadow-sm"
-                      : "text-gray-600 hover:text-[#6B318B] hover:bg-[#6B318B]/5"
-                  }`}
+                  className="px-4 py-2 text-sm font-medium rounded-xl transition-all"
+                  style={{
+                    color: isActive ? "#FFF" : undefined,
+                    background: isActive ? `linear-gradient(to right, ${color}, ${gradientEnd})` : undefined,
+                    boxShadow: isActive ? "0 1px 2px rgba(0,0,0,0.05)" : undefined,
+                  }}
+                  onMouseEnter={(e) => {
+                    if (!isActive) {
+                      e.currentTarget.style.color = color
+                      e.currentTarget.style.backgroundColor = `${color}0d`
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (!isActive) {
+                      e.currentTarget.style.color = "#6B7280"
+                      e.currentTarget.style.backgroundColor = "transparent"
+                    }
+                  }}
                 >
                   {link.label}
                 </a>
@@ -73,14 +88,18 @@ export function Navbar({ borderColor = "#722f96" }: NavbarProps) {
             href={WHATSAPP_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="hidden md:inline-block px-5 py-2 text-sm font-semibold text-white bg-gradient-to-r from-[#6B318B] to-[#A03B90] rounded-xl hover:opacity-90 transition-opacity"
+            className="hidden md:inline-block px-5 py-2 text-sm font-semibold text-white rounded-xl hover:opacity-90 transition-opacity"
+            style={{ background: `linear-gradient(to right, ${color}, ${gradientEnd})` }}
           >
             Pedir
           </a>
 
           <button
             onClick={() => setOpen(!open)}
-            className="md:hidden p-2 text-gray-600 hover:text-[#6B318B] transition-colors"
+            className="md:hidden p-2 text-gray-600 transition-colors"
+            style={{ color: `#6B7280`, '--hover-color': color } as React.CSSProperties}
+            onMouseEnter={(e) => e.currentTarget.style.color = color}
+            onMouseLeave={(e) => e.currentTarget.style.color = '#6B7280'}
             aria-label="Menú"
           >
             {open ? (
@@ -118,11 +137,10 @@ export function Navbar({ borderColor = "#722f96" }: NavbarProps) {
                   <a
                     href={link.href}
                     onClick={() => setOpen(false)}
-                    className={`block text-sm font-medium transition-colors ${
-                      isActive
-                        ? "text-[#6B318B] font-semibold"
-                        : "text-gray-600 hover:text-[#6B318B]"
-                    }`}
+                    className="block text-sm font-medium transition-colors"
+                    style={{ color: isActive ? color : undefined, fontWeight: isActive ? 600 : undefined }}
+                    onMouseEnter={(e) => { if (!isActive) e.currentTarget.style.color = color }}
+                    onMouseLeave={(e) => { if (!isActive) e.currentTarget.style.color = "#6B7280" }}
                   >
                     {link.label}
                   </a>
@@ -136,7 +154,8 @@ export function Navbar({ borderColor = "#722f96" }: NavbarProps) {
             target="_blank"
             rel="noopener noreferrer"
             onClick={() => setOpen(false)}
-            className="mt-4 block w-full text-center px-5 py-2 text-sm font-semibold text-white bg-gradient-to-r from-[#6B318B] to-[#A03B90] rounded-xl hover:opacity-90 transition-opacity"
+            className="mt-4 block w-full text-center px-5 py-2 text-sm font-semibold text-white rounded-xl hover:opacity-90 transition-opacity"
+            style={{ background: `linear-gradient(to right, ${color}, ${gradientEnd})` }}
           >
             Pedir
           </a>

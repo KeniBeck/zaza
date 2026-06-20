@@ -31,9 +31,10 @@ export function About({
                         top: "5%",
                         left: "50%",
                         transform: "translateX(-50%)",
-                        background: "radial-gradient(ellipse at 50% 40%, #9333ea88 0%, #7c3aed55 40%, transparent 70%)",
+                        background: `radial-gradient(ellipse at 50% 40%, ${gradientStart}99 0%, ${gradientMid}66 40%, transparent 70%)`,
                         borderRadius: "60% 40% 55% 45% / 50% 60% 40% 50%",
                         filter: "blur(40px)",
+                        transition: "background 0.5s ease",
                     }}
                 />
 
@@ -47,9 +48,10 @@ export function About({
                         maxHeight: 380,
                         top: "20%",
                         left: "-5%",
-                        background: "radial-gradient(ellipse, #a855f766 0%, transparent 70%)",
+                        background: `radial-gradient(ellipse, ${gradientEnd}66 0%, transparent 70%)`,
                         borderRadius: "70% 30% 60% 40% / 40% 60% 40% 60%",
                         filter: "blur(35px)",
+                        transition: "background 0.5s ease",
                     }}
                 />
 
@@ -63,9 +65,28 @@ export function About({
                         maxHeight: 320,
                         top: "30%",
                         right: "-3%",
-                        background: "radial-gradient(ellipse, #7c3aed55 0%, transparent 70%)",
+                        background: `radial-gradient(ellipse, ${gradientMid}55 0%, transparent 70%)`,
                         borderRadius: "40% 60% 30% 70% / 60% 40% 60% 40%",
                         filter: "blur(30px)",
+                        transition: "background 0.5s ease",
+                    }}
+                />
+
+                {/* Blob inferior */}
+                <div
+                    className="absolute"
+                    style={{
+                        width: "60vw",
+                        height: "50vw",
+                        maxWidth: 600,
+                        maxHeight: 450,
+                        bottom: "-8%",
+                        left: "50%",
+                        transform: "translateX(-50%)",
+                        background: `radial-gradient(ellipse at 50% 60%, ${gradientStart}88 0%, ${gradientMid}55 40%, transparent 70%)`,
+                        borderRadius: "50% 50% 40% 60% / 60% 40% 60% 40%",
+                        filter: "blur(45px)",
+                        transition: "background 0.5s ease",
                     }}
                 />
 
@@ -77,66 +98,68 @@ export function About({
                     preserveAspectRatio="xMidYMid slice"
                 >
                     {/* Burbujas grandes */}
-                    <circle cx="120" cy="180" r="28" fill="none" stroke="#9333ea60" strokeWidth="2" />
-                    <circle cx="120" cy="180" r="22" fill="#9333ea20" />
+                    <circle cx="120" cy="180" r="28" fill="none" stroke={`${gradientStart}60`} strokeWidth="2" />
+                    <circle cx="120" cy="180" r="22" fill={`${gradientStart}20`} />
 
-                    <circle cx="880" cy="250" r="22" fill="none" stroke="#7c3aed50" strokeWidth="2" />
-                    <circle cx="880" cy="250" r="16" fill="#7c3aed20" />
+                    <circle cx="880" cy="250" r="22" fill="none" stroke={`${gradientMid}50`} strokeWidth="2" />
+                    <circle cx="880" cy="250" r="16" fill={`${gradientMid}20`} />
 
-                    <circle cx="200" cy="550" r="18" fill="none" stroke="#a855f750" strokeWidth="1.5" />
-                    <circle cx="820" cy="480" r="32" fill="none" stroke="#9333ea44" strokeWidth="2" />
-                    <circle cx="820" cy="480" r="25" fill="#9333ea20" />
+                    <circle cx="200" cy="550" r="18" fill="none" stroke={`${gradientEnd}50`} strokeWidth="1.5" />
+                    <circle cx="820" cy="480" r="32" fill="none" stroke={`${gradientStart}44`} strokeWidth="2" />
+                    <circle cx="820" cy="480" r="25" fill={`${gradientStart}20`} />
 
                     {/* Burbujas pequeñas */}
-                    <circle cx="60"  cy="320" r="8"  fill="#a855f740" />
-                    <circle cx="940" cy="400" r="10" fill="#7c3aed40" />
-                    <circle cx="320" cy="680" r="6"  fill="#9333ea40" />
-                    <circle cx="700" cy="120" r="9"  fill="#a855f735" />
-                    <circle cx="150" cy="420" r="5"  fill="#9333ea44" />
-                    <circle cx="860" cy="600" r="7"  fill="#7c3aed35" />
-                    <circle cx="480" cy="720" r="5"  fill="#9333ea30" />
+                    <circle cx="60"  cy="320" r="8"  fill={`${gradientEnd}40`} />
+                    <circle cx="940" cy="400" r="10" fill={`${gradientMid}40`} />
+                    <circle cx="320" cy="680" r="6"  fill={`${gradientStart}40`} />
+                    <circle cx="700" cy="120" r="9"  fill={`${gradientEnd}35`} />
+                    <circle cx="150" cy="420" r="5"  fill={`${gradientStart}44`} />
+                    <circle cx="860" cy="600" r="7"  fill={`${gradientMid}35`} />
+                    <circle cx="480" cy="720" r="5"  fill={`${gradientStart}30`} />
 
                     {/* Burbujas medianas (antes gotitas ovaladas) */}
-                    <circle cx="90"  cy="500" r="7"  fill="#9333ea44" />
-                    <circle cx="920" cy="300" r="6"  fill="#7c3aed35" />
-                    <circle cx="750" cy="650" r="8"  fill="#a855f735" />
-                    <circle cx="250" cy="150" r="5"  fill="#9333ea35" />
+                    <circle cx="90"  cy="500" r="7"  fill={`${gradientStart}44`} />
+                    <circle cx="920" cy="300" r="6"  fill={`${gradientMid}35`} />
+                    <circle cx="750" cy="650" r="8"  fill={`${gradientEnd}35`} />
+                    <circle cx="250" cy="150" r="5"  fill={`${gradientStart}35`} />
 
                     {/* Destellos */}
-                    <circle cx="350" cy="200" r="3" fill="#e9d5ff" />
-                    <circle cx="680" cy="350" r="2" fill="#ddd6fe" />
-                    <circle cx="100" cy="650" r="2.5" fill="#c4b5fd" />
+                    <circle cx="350" cy="200" r="3" fill={`${gradientEnd}bb`} />
+                    <circle cx="680" cy="350" r="2" fill={`${gradientEnd}99`} />
+                    <circle cx="100" cy="650" r="2.5" fill={`${gradientEnd}88`} />
                 </svg>
 
                 {/* PNG hojas decorativas */}
                 <img
                     src="/decor/hoja-one.png"
                     alt=""
-                    className="absolute top-20 left-18 w-36 md:w-76 pointer-events-none select-none opacity-90"
+                    className="absolute top-22 left-2 sm:top-16 sm:left-16 w-30 sm:w-36 md:w-76 pointer-events-none select-none opacity-90"
                 />
                 <img
                     src="/decor/hoja-one-bottom.png"
                     alt=""
-                    className="absolute bottom-20 right-18 w-36 md:w-76 pointer-events-none select-none opacity-90"
+                    className="absolute bottom-8 right-2 sm:bottom-16 sm:right-16 w-30 sm:w-36 md:w-76 pointer-events-none select-none opacity-90"
                 />
             </div>
             {/* ── FIN FONDO ── */}
 
             {/* Contenido original sin cambios */}
-            <ZazaLogo
-                size={280}
-                color="#6B318B"
-                gradientEnd="#A03B90"
-                className="select-none pointer-events-none"
-            />
+            <div className="mt-6 md:mt-0 w-full flex justify-center">
+                <ZazaLogo
+                    size={280}
+                    color="#6B318B"
+                    gradientEnd="#A03B90"
+                    className="select-none pointer-events-none w-full max-w-[320px] h-auto lg:w-auto lg:max-w-none"
+                />
+            </div>
 
             <p className="mt-14 text-base md:text-xl text-[#464e59] text-center px-6 max-w-md leading-relaxed">
                 el sabor de los momentos<br />que no se explican,{" "}
-                <span className="font-zaza text-3xl text-transparent bg-clip-text bg-gradient-to-r from-[#6B318B] via-[#C084FC] to-[#6B318B] bg-[length:200%_auto] animate-text-shimmer drop-shadow-[0_0_8px_rgba(168,85,247,0.5)]">se viven</span>.
+                <span className="font-zaza text-2xl sm:text-3xl text-transparent bg-clip-text bg-[length:200%_auto] animate-text-shimmer" style={{ backgroundImage: `linear-gradient(to right, ${gradientStart}, ${gradientEnd}, ${gradientStart})`, filter: `drop-shadow(0 0 8px ${gradientMid}80)` }}>se viven</span>.
             </p>
 
-            <div className="mt-8 flex flex-col sm:flex-row items-center gap-4">
-                <div className="relative group rounded-xl overflow-hidden">
+            <div className="mt-8 flex flex-col sm:flex-row items-center gap-4 sm:w-auto justify-center">
+                <div className="relative group rounded-xl overflow-hidden w-full sm:w-auto">
                     <div
                         className="absolute -inset-0.5 rounded-xl opacity-60 group-hover:opacity-100 transition-opacity duration-500 animate-spin-slow"
                         style={{
@@ -146,18 +169,21 @@ export function About({
                     <div className="relative m-[2px] rounded-[10px] bg-[#F3E8FF] group-hover:bg-white/20 group-hover:backdrop-blur-md transition-all duration-300">
                         <a
                             href="#productos"
-                            className="block px-7 py-3 text-sm font-semibold rounded-[10px] text-[#6B318B] group-hover:text-[#6B318B] transition-colors duration-300"
+                            className="block w-full px-7 py-3 text-sm font-semibold rounded-[10px] transition-colors duration-300 text-center"
+                            style={{ color: gradientStart }}
+                            onMouseEnter={(e) => e.currentTarget.style.color = gradientStart}
+                            onMouseLeave={(e) => e.currentTarget.style.color = gradientStart}
                         >
                             Ver sabores
                         </a>
                     </div>
                 </div>
-                <div className="relative group rounded-xl">
+                <div className="relative group rounded-xl sm:w-auto">
                     <a
                         href={WHATSAPP_URL}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="relative block px-7 py-3 text-sm font-semibold text-white rounded-xl transition-all duration-300"
+                        className="relative block w-full px-7 py-3 text-sm font-semibold text-white rounded-xl transition-all duration-300 text-center"
                         style={{
                             background: `linear-gradient(to right, ${gradientStart}, ${gradientMid})`,
                             boxShadow: `0 0 0px transparent`,
