@@ -8,17 +8,18 @@ import { About } from "../components/About"
 import { Sabores } from "../components/Sabores"
 import { ZazaLogo } from "../components/ZazaLogo"
 import { FLAVORS } from "../data/flavors"
+import { asset } from "../constants"
 
-useGLTF.preload("/textura-morada.glb")
-useGLTF.preload("/textura-azul.glb")
+useGLTF.preload(asset("/textura-morada.glb"))
+useGLTF.preload(asset("/textura-azul.glb"))
 
 interface HomeProps {
   bgColor?: string
 }
 
 function Preloader({ onReady }: { onReady: () => void }) {
-  useGLTF("/textura-morada.glb")
-  useGLTF("/textura-azul.glb")
+  useGLTF(asset("/textura-morada.glb"))
+  useGLTF(asset("/textura-azul.glb"))
 
   useEffect(() => { onReady() }, [onReady])
 

@@ -2,6 +2,7 @@ import { useRef, useMemo, useEffect } from "react"
 import { useFrame } from "@react-three/fiber"
 import { useGLTF } from "@react-three/drei"
 import * as THREE from "three"
+import { asset } from "../constants"
 
 const MODEL_SCALE_DESKTOP = 0.010
 const MODEL_SCALE_MOBILE = 0.007
@@ -59,7 +60,8 @@ export function CanModel({ scrollYRef, heroThreshold = 0, targetPosition = null,
   const pos = useRef(new THREE.Vector3(config.heroX, config.heroY + config.dropHeight, 0))
   const lerpTarget = useRef(new THREE.Vector3())
 
-  const { scene } = useGLTF(glbUrl || "/textura-morada.glb")
+  const modelUrl = glbUrl ? asset(glbUrl) : asset("/textura-morada.glb")
+  const { scene } = useGLTF(modelUrl)
 
   const modelScale = useMemo(
     () => (window.innerWidth < MOBILE_BREAKPOINT ? MODEL_SCALE_MOBILE : MODEL_SCALE_DESKTOP),
