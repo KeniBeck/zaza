@@ -72,10 +72,6 @@ export function About({
                     className="lava-blob about-lava-2"
                     style={{ backgroundColor: `rgba(${blobMidRgb},${isMobile ? 0.55 : 0.25})` }}
                 />
-                <div
-                    className="lava-blob about-lava-3"
-                    style={{ backgroundColor: `rgba(${blobEndRgb},${isMobile ? 0.50 : 0.20})` }}
-                />
 
                 {/* Blob grande central morado */}
                 <div
