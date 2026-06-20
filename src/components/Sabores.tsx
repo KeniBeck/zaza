@@ -1,4 +1,4 @@
-import { useRef, useState, useCallback } from "react"
+import { useRef, useState, useCallback, useEffect } from "react"
 import { FlavorCard } from "./FlavorCard"
 import { InfoModal } from "./mobile/InfoModal"
 import { MobileFlavorCard } from "./mobile/MobileFlavorCard"
@@ -10,11 +10,34 @@ interface SaboresProps {
   setActiveFlavorIndex: React.Dispatch<React.SetStateAction<number>>
 }
 
+function hexToRgb(hex: string): string {
+  const c = hex.replace('#', '')
+  if (c.length !== 6) return '255,255,255'
+  return `${parseInt(c.substring(0,2),16)},${parseInt(c.substring(2,4),16)},${parseInt(c.substring(4,6),16)}`
+}
+
 export function Sabores({ onFirstCardReady, activeFlavorIndex, setActiveFlavorIndex }: SaboresProps) {
   const sectionRef = useRef<HTMLElement>(null)
   const cardRef = useRef<HTMLDivElement>(null)
   const [showInfo, setShowInfo] = useState(false)
   const activeFlavor = FLAVORS[activeFlavorIndex]
+  const blobRgb = hexToRgb(activeFlavor.color)
+  const blobMidRgb = hexToRgb(activeFlavor.gradientMid)
+  const blobEndRgb = hexToRgb(activeFlavor.gradientEnd)
+  const isMobile = window.innerWidth < 768
+
+  const [bgLayers, setBgLayers] = useState([activeFlavor.sectionBg, activeFlavor.sectionBg])
+  const [activeBgLayer, setActiveBgLayer] = useState(0)
+
+  useEffect(() => {
+    const nextLayer = activeBgLayer === 0 ? 1 : 0
+    setBgLayers(prev => {
+      const next = [...prev]
+      next[nextLayer] = activeFlavor.sectionBg
+      return next
+    })
+    setActiveBgLayer(nextLayer)
+  }, [activeFlavorIndex])
 
   const handleCardRef = useCallback((el: HTMLDivElement | null) => {
     cardRef.current = el
@@ -36,49 +59,43 @@ export function Sabores({ onFirstCardReady, activeFlavorIndex, setActiveFlavorIn
       id="productos"
       ref={sectionRef}
       className="relative z-20 min-h-screen flex flex-col items-center justify-center px-6 py-24 overflow-hidden"
-      style={{
-        background: activeFlavor.sectionBg,
-        transition: "background 0.5s ease",
-      }}
     >
-      {/* Subtle light blobs */}
+      {/* Crossfade background layers */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute inset-0 transition-opacity duration-[800ms] ease" style={{ background: bgLayers[0], opacity: activeBgLayer === 0 ? 1 : 0 }} />
+        <div className="absolute inset-0 transition-opacity duration-[800ms] ease" style={{ background: bgLayers[1], opacity: activeBgLayer === 1 ? 1 : 0 }} />
+      </div>
+
+      {/* Lava blobs — main background visual */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <div
-          className="absolute -top-20 -left-10 w-[32rem] h-[28rem] rounded-full opacity-30"
-          style={{
-            background: `radial-gradient(circle, ${activeFlavor.gradientEnd}18, transparent 70%)`,
-            filter: "blur(80px)",
-            transition: "background 0.5s ease",
-          }}
+          className="lava-blob sabores-lava-1"
+          style={{ backgroundColor: `rgba(${blobRgb},${isMobile ? 0.70 : 0.35})` }}
         />
         <div
-          className="absolute top-1/4 -right-16 w-80 h-96 rounded-full opacity-25"
-          style={{
-            background: `radial-gradient(circle, ${activeFlavor.gradientMid}12, transparent 70%)`,
-            filter: "blur(70px)",
-            transition: "background 0.5s ease",
-          }}
+          className="lava-blob sabores-lava-2"
+          style={{ backgroundColor: `rgba(${blobMidRgb},${isMobile ? 0.60 : 0.30})` }}
         />
         <div
-          className="absolute -bottom-20 left-1/3 w-64 h-64 rounded-full opacity-20"
-          style={{
-            background: `radial-gradient(circle, ${activeFlavor.gradientEnd}10, transparent 70%)`,
-            filter: "blur(60px)",
-            transition: "background 0.5s ease",
-          }}
+          className="lava-blob sabores-lava-3"
+          style={{ backgroundColor: `rgba(${blobEndRgb},${isMobile ? 0.55 : 0.25})` }}
         />
-        <div className="absolute top-12 right-8 w-3 h-3 rounded-full bg-white/8" />
-        <div className="absolute bottom-32 left-12 w-2 h-2 rounded-full bg-white/6" />
-        <div className="absolute top-1/2 right-1/4 w-4 h-4 rounded-full bg-white/5" />
       </div>
 
       {/* Content */}
       <div className="relative z-10 max-w-5xl w-full">
         <div className="mb-12 text-center">
-          <h2 className="text-4xl font-zaza text-white">
+          <h2
+            className="text-4xl font-zaza"
+            style={{
+              color: '#fff',
+              textShadow: `0 0 8px ${activeFlavor.color}, 0 0 20px ${activeFlavor.color}, 0 0 40px ${activeFlavor.color}`,
+              WebkitTextStroke: `1px ${activeFlavor.color}`,
+            }}
+          >
             Nuestros Sabores
           </h2>
-          <p className="mt-3 text-[#C4B5FD] text-sm md:text-base">
+          <p className="mt-3 text-white/85 text-sm md:text-base">
             Elige el tuyo y déjate llevar
           </p>
         </div>

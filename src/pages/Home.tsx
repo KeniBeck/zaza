@@ -83,7 +83,7 @@ export function Home({ bgColor = "#F3E8FF" }: HomeProps) {
 
   return (
     <div className="relative w-full" style={{ backgroundColor: bgColor }}>
-      <Navbar color={activeFlavor.color} gradientEnd={activeFlavor.gradientEnd} />
+      <Navbar color={activeFlavor.color} gradientEnd={activeFlavor.gradientEnd} borderColor={activeFlavor.color} />
 
       <ErrorBoundary key={canvasKey} onError={handleCanvasError}>
         <div id="scene-canvas" className="fixed inset-0 z-40 pointer-events-none">
@@ -113,6 +113,7 @@ export function Home({ bgColor = "#F3E8FF" }: HomeProps) {
             gradientStart={activeFlavor.color}
             gradientMid={activeFlavor.gradientMid}
             gradientEnd={activeFlavor.gradientEnd}
+            activeFlavorIndex={activeFlavorIndex}
           />
         </section>
         <Sabores

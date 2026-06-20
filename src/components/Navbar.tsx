@@ -46,8 +46,8 @@ export function Navbar({ borderColor = "#722f96", color = "#6B318B", gradientEnd
   }, [])
 
   return (
-    <nav className="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[90%] max-w-5xl">
-      <div className="relative flex items-center justify-between px-5 py-3 bg-white/70 backdrop-blur-md rounded-2xl shadow-sm border border-white/20 overflow-hidden">
+    <nav className="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[90%] max-w-5xl will-change-transform">
+      <div className="relative flex items-center justify-between px-5 py-3 bg-white/70 backdrop-blur-sm rounded-2xl shadow-sm border border-white/20 overflow-hidden">
         <ZazaLogo size={36} color={color} gradientEnd={gradientEnd} className="select-none" />
 
         <ul className="hidden md:flex items-center gap-1">
@@ -128,7 +128,7 @@ export function Navbar({ borderColor = "#722f96", color = "#6B318B", gradientEnd
       </div>
 
       {open && (
-        <div className="mt-2 px-5 py-4 bg-white/70 backdrop-blur-md rounded-2xl shadow-sm border border-white/20 md:hidden">
+        <div className="mt-2 px-5 py-4 bg-white/70 backdrop-blur-sm rounded-2xl shadow-sm border border-white/20 md:hidden">
           <ul className="flex flex-col gap-4">
             {NAV_LINKS.map((link) => {
               const isActive = activeSection === link.href.slice(1)
