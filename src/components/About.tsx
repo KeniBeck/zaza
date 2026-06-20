@@ -38,6 +38,7 @@ export function About({
     }
     const blobRgb = hexToRgb(gradientStart)
     const blobMidRgb = hexToRgb(gradientMid)
+    const blobEndRgb = hexToRgb(gradientEnd)
     const aboutBg = `linear-gradient(180deg, ${gradientStart}20 0%, ${gradientMid}15 50%, ${gradientEnd}20 100%)`
     const [bgLayers, setBgLayers] = useState([aboutBg, aboutBg])
     const [activeBgLayer, setActiveBgLayer] = useState(0)
@@ -70,6 +71,18 @@ export function About({
                 <div
                     className="lava-blob about-lava-2"
                     style={{ backgroundColor: `rgba(${blobMidRgb},${isMobile ? 0.55 : 0.25})` }}
+                />
+                <div
+                    className="lava-blob about-lava-3"
+                    style={{
+                        '--blob-rgb': blobEndRgb,
+                        background: `radial-gradient(
+                        circle,
+                        rgba(${blobEndRgb},${isMobile ? 0.45 : 0.20}) 0%,
+                        rgba(${blobEndRgb},${isMobile ? 0.25 : 0.10}) 45%,
+                        rgba(${blobEndRgb},0) 80%
+                        )`, 
+                    } as React.CSSProperties}
                 />
 
                 {/* Blob grande central morado */}
