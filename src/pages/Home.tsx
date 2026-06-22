@@ -93,7 +93,7 @@ export function Home({ bgColor = "#F3E8FF" }: HomeProps) {
             camera={{ position: [0, 0.05, 4], fov: 45 }}
             gl={{ antialias: true, alpha: true, precision: "highp", powerPreference: "high-performance", logarithmicDepthBuffer: true }}
             dpr={isMobile
-              ? Math.min(deviceDpr * 1.5, 3)
+              ? Math.min(deviceDpr * 1.5, 2)
               : Math.min(deviceDpr * 2, 4)
             }
             performance={{ min: 0.9 }}
