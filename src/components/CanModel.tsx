@@ -63,6 +63,26 @@ export function CanModel({ scrollYRef, heroThreshold = 0, targetPosition = null,
   const modelUrl = glbUrl ? asset(glbUrl) : asset("/textura-morada.glb")
   const { scene } = useGLTF(modelUrl)
 
+  useEffect(() => {
+    scene.traverse((child) => {
+      if ((child as THREE.Mesh).isMesh) {
+        const mesh = child as THREE.Mesh
+        const mat = mesh.material as THREE.MeshStandardMaterial
+        mesh.renderOrder = 1
+        if (mat) {
+          mat.alphaToCoverage = true
+          mat.needsUpdate = true
+          if (mat.map) {
+            mat.map.anisotropy = 16
+            mat.map.minFilter = THREE.LinearMipmapLinearFilter
+            mat.map.generateMipmaps = true
+            mat.map.needsUpdate = true
+          }
+        }
+      }
+    })
+  }, [scene])
+
   const modelScale = useMemo(
     () => (window.innerWidth < MOBILE_BREAKPOINT ? MODEL_SCALE_MOBILE : MODEL_SCALE_DESKTOP),
     [],
