@@ -19,7 +19,7 @@ export const FLAVORS: Flavor[] = [
     tagline: "Dulce y envolvente",
     description: "Tranquilo pero traicionero… entra como jueguito y termina hablando solo.",
     ingredients: ["Sandía", "Maracuyá", "Whisky"],
-    glb: "/textura-morada.glb",
+    glb: "/textura-morada-small.glb",
     color: "#6B318B",
     gradientMid: "#A855F7",
     gradientEnd: "#A03B90",

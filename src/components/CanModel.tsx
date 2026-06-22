@@ -4,8 +4,8 @@ import { useGLTF } from "@react-three/drei"
 import * as THREE from "three"
 import { asset } from "../constants"
 
-const MODEL_SCALE_DESKTOP = 0.010
-const MODEL_SCALE_MOBILE = 0.007
+const MODEL_SCALE_DESKTOP = 0.098
+const MODEL_SCALE_MOBILE = 0.075
 const MOBILE_BREAKPOINT = 768
 
 const HERO_X_DESKTOP = 0.011
