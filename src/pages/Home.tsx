@@ -68,9 +68,6 @@ export function Home({ bgColor = "#F3E8FF" }: HomeProps) {
     }
   }, [])
 
-  const isMobile = window.innerWidth < 768
-  const deviceDpr = window.devicePixelRatio
-
   if (!modelReady) {
     return (
       <>
