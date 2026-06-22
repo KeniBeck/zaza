@@ -57,8 +57,6 @@ export function Home({ bgColor = "#F3E8FF" }: HomeProps) {
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
-  const isMobile = window.innerWidth < 768
-
   const handleFirstCardReady = useCallback((el: HTMLElement | null) => {
     setFirstCardEl(el)
   }, [])
@@ -69,6 +67,9 @@ export function Home({ bgColor = "#F3E8FF" }: HomeProps) {
       setCanvasKey((k) => k + 1)
     }
   }, [])
+
+  const isMobile = window.innerWidth < 768
+  const deviceDpr = window.devicePixelRatio
 
   if (!modelReady) {
     return (
@@ -90,8 +91,12 @@ export function Home({ bgColor = "#F3E8FF" }: HomeProps) {
           <Canvas
             key={canvasKey}
             camera={{ position: [0, 0.05, 4], fov: 45 }}
-            gl={{ alpha: true, antialias: !isMobile, powerPreference: "high-performance" }}
-            dpr={isMobile ? 1 : [1, 1.5]}
+            gl={{ antialias: true, alpha: true, precision: "highp", powerPreference: "high-performance", logarithmicDepthBuffer: true }}
+            dpr={isMobile
+              ? Math.min(deviceDpr * 3, 5)
+              : Math.min(deviceDpr * 2, 4)
+            }
+            performance={{ min: 0.9 }}
             style={{ pointerEvents: "none" }}
             onCreated={(state) => {
               state.gl.setClearColor(0x000000, 0)
