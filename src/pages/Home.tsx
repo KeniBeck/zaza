@@ -68,9 +68,6 @@ export function Home({ bgColor = "#F3E8FF" }: HomeProps) {
     }
   }, [])
 
-  const isMobile = window.innerWidth < 768
-  const deviceDpr = window.devicePixelRatio
-
   if (!modelReady) {
     return (
       <>
@@ -92,11 +89,7 @@ export function Home({ bgColor = "#F3E8FF" }: HomeProps) {
             key={canvasKey}
             camera={{ position: [0, 0.05, 4], fov: 45 }}
             gl={{ antialias: true, alpha: true, precision: "highp", powerPreference: "high-performance", logarithmicDepthBuffer: true }}
-            dpr={isMobile
-              ? Math.min(deviceDpr * 3, 5)
-              : Math.min(deviceDpr * 2, 4)
-            }
-            performance={{ min: 0.9 }}
+            dpr={Math.min(window.devicePixelRatio * 2, 4)}
             style={{ pointerEvents: "none" }}
             onCreated={(state) => {
               state.gl.setClearColor(0x000000, 0)
