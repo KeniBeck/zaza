@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react"
 import { WHATSAPP_URL, asset } from "../constants";
 import { ZazaLogo } from "./ZazaLogo";
+import { useScreenSize } from "../hooks/useScreenSize";
 
 function smoothScrollTo(targetY: number, duration: number) {
     const startY = window.scrollY
@@ -43,6 +44,7 @@ export function About({
     const [bgLayers, setBgLayers] = useState([aboutBg, aboutBg])
     const [activeBgLayer, setActiveBgLayer] = useState(0)
     const isMobile = window.innerWidth < 768
+    const { mobileScale } = useScreenSize()
 
     useEffect(() => {
         const nextLayer = activeBgLayer === 0 ? 1 : 0
@@ -218,7 +220,7 @@ export function About({
                 />
             </div>
 
-            <p className="mt-14 text-base md:text-xl text-[#464e59] text-center px-6 max-w-md leading-relaxed">
+            <p className="mt-16 text-base md:text-xl text-[#464e59] text-center px-6 max-w-md leading-relaxed" style={{ marginTop: mobileScale("3.5rem", "3.5rem", "5rem", "8rem", undefined) }}>
                 el sabor de los momentos<br />que no se explican,{" "}
                 <span className="font-zaza text-2xl sm:text-3xl text-transparent bg-clip-text bg-[length:200%_auto] animate-text-shimmer" style={{ backgroundImage: `linear-gradient(to right, ${gradientStart}, ${gradientEnd}, ${gradientStart})`, filter: `drop-shadow(0 0 8px ${gradientMid}80)` }}>se viven</span>.
             </p>

@@ -10,17 +10,40 @@ const MOBILE_BREAKPOINT = 768
 
 const HERO_X_DESKTOP = 0.011
 const HERO_X_MOBILE = 0.05
+
+const screenW = window.innerWidth
+const screenH = window.innerHeight
+
 const HERO_Y_DESKTOP = -0.01
-const HERO_Y_MOBILE = 0.18
+const HERO_Y_MOBILE =
+  screenW <= 360 && screenH >= 700 ? 0.28 :
+    screenW < 376
+      ? 0.18    // Mini/SE — funciona bien actualmente
+      : screenW < 393
+        ? 0.22     // iPhone 13/14 estándar
+        : screenW < 430
+          ? 0.30    // iPhone 14 Pro
+          : 0.26    // Pro Max y más grandes
 const SCROLL_X_RANGE_DESKTOP = 0.5
 const SCROLL_X_RANGE_MOBILE = -0.01
 const SCROLL_Y_RANGE_DESKTOP = 0.2
 const SCROLL_Y_RANGE_MOBILE = 0.2
 const TRANSITION_RANGE = 600
 const CARD_X_DESKTOP = -1.5
-const CARD_X_MOBILE = -0.25
+const CARD_X_MOBILE = -0.08
 const CARD_Y_DESKTOP = -0.1
-const CARD_Y_MOBILE = -0.15
+console.log("screenW", screenW, "screenH", screenH)
+const CARD_Y_MOBILE =
+screenW === 390 && screenH === 676 ? 0.2 :
+screenW <= 375 && screenH >= 644 ? -0.08 :
+  screenW < 375
+    ? 0.08    // Mini/SE — funciona bien actualmente
+    : screenW < 393
+      ? 0.05    // iPhone 13/14 estándar
+      : screenW < 430
+        ? -0.06    // iPhone 14 Pro
+        : -0.35    // iPhone 14 Pro Max y más grandes
+
 
 const DURATION = 0.8
 const DROP_HEIGHT_DESKTOP = 0.6
