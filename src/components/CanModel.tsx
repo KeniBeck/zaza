@@ -32,7 +32,6 @@ const TRANSITION_RANGE = 600
 const CARD_X_DESKTOP = -1.5
 const CARD_X_MOBILE = -0.08
 const CARD_Y_DESKTOP = -0.1
-console.log("screenW", screenW, "screenH", screenH)
 const CARD_Y_MOBILE =
 screenW === 390 && screenH === 676 ? 0.2 :
 screenW <= 375 && screenH >= 644 ? -0.08 :
@@ -58,13 +57,17 @@ interface CanModelProps {
   heroThreshold?: number
   targetPosition?: THREE.Vector3 | null
   glbUrl?: string
+  cardYOverride?: number | null
+  isFlipped?: boolean
 }
 
-export function CanModel({ scrollYRef, heroThreshold = 0, targetPosition = null, glbUrl }: CanModelProps) {
+export function CanModel({ scrollYRef, heroThreshold = 0, targetPosition = null, glbUrl, cardYOverride, isFlipped }: CanModelProps) {
   const groupRef = useRef<THREE.Group>(null)
   const rotateRef = useRef<THREE.Group>(null)
   const startTime = useRef(0)
   const animDone = useRef(false)
+  const flipProgress = useRef(0)
+  const materialsRef = useRef<THREE.MeshStandardMaterial[]>([])
 
   const config = useMemo(() => {
     const isMobile = window.innerWidth < MOBILE_BREAKPOINT
@@ -87,6 +90,7 @@ export function CanModel({ scrollYRef, heroThreshold = 0, targetPosition = null,
   const { scene } = useGLTF(modelUrl)
 
   useEffect(() => {
+    materialsRef.current = []
     scene.traverse((child) => {
       if ((child as THREE.Mesh).isMesh) {
         const mesh = child as THREE.Mesh
@@ -101,6 +105,7 @@ export function CanModel({ scrollYRef, heroThreshold = 0, targetPosition = null,
             mat.map.generateMipmaps = true
             mat.map.needsUpdate = true
           }
+          materialsRef.current.push(mat)
         }
       }
     })
@@ -134,6 +139,28 @@ export function CanModel({ scrollYRef, heroThreshold = 0, targetPosition = null,
   useFrame(({ clock }) => {
     if (!groupRef.current || !rotateRef.current) return
     if (startTime.current === 0) startTime.current = clock.elapsedTime
+
+    // Animar flip sincronizado con la card
+    const flipTarget = isFlipped ? 1 : 0
+    flipProgress.current += (flipTarget - flipProgress.current) * 0.08
+    const flipAngle = flipProgress.current * Math.PI
+
+    groupRef.current.rotation.y = flipAngle
+
+    const scaleMultiplier = 1 - Math.sin(flipAngle) * 0.15
+    groupRef.current.scale.setScalar(modelScale * scaleMultiplier)
+
+    // Opacidad en materiales durante el flip
+    const shouldHide = flipProgress.current > 0.5
+    const targetOpacity = shouldHide ? 0 : 1
+
+    materialsRef.current.forEach(mat => {
+      mat.transparent = true
+      mat.opacity += (targetOpacity - mat.opacity) * 0.15
+      mat.needsUpdate = true
+    })
+
+    groupRef.current.visible = materialsRef.current.some(m => m.opacity > 0.01)
 
     const elapsed = clock.elapsedTime - startTime.current
 
@@ -169,7 +196,7 @@ export function CanModel({ scrollYRef, heroThreshold = 0, targetPosition = null,
       const t = Math.min((scrollY - heroThreshold) / TRANSITION_RANGE, 1)
       const smoothT = 1 - Math.pow(1 - t, 3)
       lerpTarget.current.x = config.cardX
-      lerpTarget.current.y = config.cardY
+      lerpTarget.current.y = cardYOverride ?? config.cardY
       lerpTarget.current.z = targetPosition?.z ?? 0
       groupRef.current.position.lerpVectors(pos.current, lerpTarget.current, smoothT)
     } else {
@@ -178,7 +205,7 @@ export function CanModel({ scrollYRef, heroThreshold = 0, targetPosition = null,
   })
 
   return (
-    <group ref={groupRef} position={initialPos} scale={modelScale}>
+    <group ref={groupRef} position={initialPos}>
       <group ref={rotateRef} position={rotateOrigin}>
         <primitive object={scene} position={sceneOffset} />
       </group>

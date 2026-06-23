@@ -83,7 +83,7 @@ export function About({
                         rgba(${blobEndRgb},${isMobile ? 0.45 : 0.20}) 0%,
                         rgba(${blobEndRgb},${isMobile ? 0.25 : 0.10}) 45%,
                         rgba(${blobEndRgb},0) 80%
-                        )`, 
+                        )`,
                     } as React.CSSProperties}
                 />
 
@@ -226,29 +226,30 @@ export function About({
             </p>
 
             <div className="mt-8 flex flex-col sm:flex-row items-center gap-4 sm:w-auto justify-center">
-                <div className="relative group rounded-xl overflow-hidden w-full sm:w-auto">
-                    <div
-                        className="absolute -inset-0.5 rounded-xl opacity-60 group-hover:opacity-100 transition-opacity duration-500 animate-spin-slow"
-                        style={{
-                            background: `conic-gradient(from 0deg, transparent 10deg, ${gradientEnd}cc 30deg, ${gradientMid}cc 50deg, #fff 70deg, ${gradientStart}cc 90deg, transparent 110deg, transparent 360deg)`,
-                        }}
-                    />
-                    <div className="relative m-[2px] rounded-[10px] bg-[#F3E8FF] group-hover:bg-white/20 group-hover:backdrop-blur-md transition-all duration-300">
-                        <a
-                            href="#productos"
-                            className="block w-full px-7 py-3 text-sm font-semibold rounded-[10px] transition-colors duration-300 text-center"
-                            style={{ color: gradientStart }}
-                            onMouseEnter={(e) => e.currentTarget.style.color = gradientStart}
-                            onMouseLeave={(e) => e.currentTarget.style.color = gradientStart}
-                            onClick={(e) => {
-                                e.preventDefault()
-                                const el = document.getElementById('productos')
-                                if (el) smoothScrollTo(el.getBoundingClientRect().top + window.scrollY, 1000)
-                            }}
-                        >
-                            Ver sabores
-                        </a>
-                    </div>
+                <div
+                  className="snake-border group rounded-xl w-full sm:w-auto"
+                  style={{
+                    ["--g1" as any]: gradientStart,
+                    ["--g2" as any]: gradientEnd,
+                    ["--speed" as any]: "4s",
+                  }}
+                >
+                  <div className="bg-[#F3E8FF] group-hover:bg-white/20 group-hover:backdrop-blur-md transition-all duration-300 rounded-[10px]">
+                    <a
+                      href="#productos"
+                      className="block w-full px-7 py-3 text-sm font-semibold rounded-[10px] transition-colors duration-300 text-center"
+                      style={{ color: gradientStart }}
+                      onMouseEnter={(e) => e.currentTarget.style.color = gradientStart}
+                      onMouseLeave={(e) => e.currentTarget.style.color = gradientStart}
+                      onClick={(e) => {
+                        e.preventDefault()
+                        const el = document.getElementById('productos')
+                        if (el) smoothScrollTo(el.getBoundingClientRect().top + window.scrollY, 1000)
+                      }}
+                    >
+                      Ver sabores
+                    </a>
+                  </div>
                 </div>
                 <div className="relative group rounded-xl sm:w-auto">
                     <a

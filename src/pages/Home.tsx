@@ -48,6 +48,7 @@ export function Home({ bgColor = "#F3E8FF" }: HomeProps) {
   const retried = useRef(false)
   const flavorCardRef = useRef<HTMLElement | null>(null)
   const [activeFlavorIndex, setActiveFlavorIndex] = useState(0)
+  const [isFlipped, setIsFlipped] = useState(false)
   const activeFlavor = FLAVORS[activeFlavorIndex]
 
   const heroThreshold = useMemo(() => window.innerHeight, [])
@@ -110,6 +111,7 @@ export function Home({ bgColor = "#F3E8FF" }: HomeProps) {
               heroThreshold={heroThreshold}
               firstCardEl={firstCardEl}
               glbUrl={activeFlavor.glb}
+              isFlipped={isFlipped}
             />
           </Canvas>
         </div>
@@ -128,6 +130,8 @@ export function Home({ bgColor = "#F3E8FF" }: HomeProps) {
           onFirstCardReady={handleFirstCardReady}
           activeFlavorIndex={activeFlavorIndex}
           setActiveFlavorIndex={setActiveFlavorIndex}
+          isFlipped={isFlipped}
+          onFlip={setIsFlipped}
         />
       </div>
     </div>
