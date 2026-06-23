@@ -46,6 +46,7 @@ export function Home({ bgColor = "#F3E8FF" }: HomeProps) {
   const [modelReady, setModelReady] = useState(false)
   const [canvasKey, setCanvasKey] = useState(0)
   const retried = useRef(false)
+  const flavorCardRef = useRef<HTMLElement | null>(null)
   const [activeFlavorIndex, setActiveFlavorIndex] = useState(0)
   const activeFlavor = FLAVORS[activeFlavorIndex]
 
@@ -59,6 +60,7 @@ export function Home({ bgColor = "#F3E8FF" }: HomeProps) {
 
   const handleFirstCardReady = useCallback((el: HTMLElement | null) => {
     setFirstCardEl(el)
+    flavorCardRef.current = el
   }, [])
 
   const handleCanvasError = useCallback(() => {

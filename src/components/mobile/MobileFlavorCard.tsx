@@ -1,6 +1,7 @@
 import type { Flavor } from "../../data/flavors"
 import { LiaInfoSolid } from "react-icons/lia"
 import { TiArrowLeftOutline, TiArrowRightOutline } from "react-icons/ti"
+import { useScreenSize } from "../../hooks/useScreenSize"
 
 interface MobileFlavorCardProps {
   flavor: Flavor
@@ -11,15 +12,17 @@ interface MobileFlavorCardProps {
 }
 
 export function MobileFlavorCard({ flavor, cardRef, onInfo, onPrev, onNext }: MobileFlavorCardProps) {
+  const { mobileScale } = useScreenSize()
   return (
     <div className="md:hidden flex flex-col items-center gap-6">
       <div
         ref={cardRef}
         id="first-flavor-card"
-        className="w-[280px] h-[380px] flex flex-col items-center justify-end gap-6 px-7 pb-7 rounded-3xl
+        className="w-full flex flex-col items-center justify-end gap-6 px-7 pb-7 rounded-3xl
           bg-white/10 backdrop-blur-xl border shadow-xl
           transition-all duration-300 relative overflow-hidden"
         style={{
+          height: mobileScale("410px", "410px", "430px", "500px", "410px"),
           borderColor: `${flavor.color}40`,
           boxShadow: "0 8px 32px rgba(0,0,0,0.12), inset 0 1px 0 rgba(255,255,255,0.15)",
         }}
