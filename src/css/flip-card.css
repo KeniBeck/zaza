@@ -1,0 +1,54 @@
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 6px 1px rgba(255,255,255,0.15);
+    border-color: rgba(255,255,255,0.2);
+  }
+  50% {
+    box-shadow: 0 0 14px 4px rgba(255,255,255,0.4);
+    border-color: rgba(255,255,255,0.6);
+  }
+}
+
+@keyframes bounceSoft {
+  0%, 100% { transform: translateY(0px) scale(1); }
+  20% { transform: translateY(-2px) scale(1.03); }
+  50% { transform: translateY(0.5px) scale(0.99); }
+  80% { transform: translateY(-1px) scale(1.01); }
+}
+
+@keyframes shimmerSweep {
+  0% { transform: translateX(-150%); }
+  50%, 100% { transform: translateX(150%); }
+}
+
+.btn-info-glow {
+  animation: pulseGlow 2.5s ease-in-out infinite,
+             bounceSoft 3s ease-in-out infinite;
+}
+
+.shimmer-sweep {
+  animation: shimmerSweep 3s ease-in-out infinite;
+}
+
+@keyframes pulseGlowBtn {
+  0%, 100% {
+    box-shadow: 0 0 8px 2px rgba(255,255,255,0.1);
+    border-color: rgba(255,255,255,0.2);
+  }
+  50% {
+    box-shadow: 0 0 18px 5px rgba(255,255,255,0.25);
+    border-color: rgba(255,255,255,0.5);
+  }
+}
+
+@keyframes bounceSoftBtn {
+  0%, 100% { transform: translateY(0px); }
+  20% { transform: translateY(-2px); }
+  50% { transform: translateY(0.5px); }
+  80% { transform: translateY(-1px); }
+}
+
+.btn-volver-glow {
+  animation: pulseGlowBtn 2.5s ease-in-out infinite,
+             bounceSoftBtn 3s ease-in-out infinite;
+}

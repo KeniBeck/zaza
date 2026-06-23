@@ -4,6 +4,7 @@ export interface Flavor {
   tagline: string
   description: string
   ingredients: string[]
+  price: string
   glb: string
   color: string
   gradientMid: string
@@ -19,6 +20,7 @@ export const FLAVORS: Flavor[] = [
     tagline: "Dulce y envolvente",
     description: "Tranquilo pero traicionero… entra como jueguito y termina hablando solo.",
     ingredients: ["Sandía", "Maracuyá", "Whisky"],
+    price: "$ 17.900",
     glb: "/textura-morada.glb",
     color: "#6B318B",
     gradientMid: "#A855F7",
@@ -32,6 +34,7 @@ export const FLAVORS: Flavor[] = [
     tagline: "Fresca y vibrante",
     description: "Este es peligroso… cuando caes en cuenta ya vas en el tercero.",
     ingredients: ["Menta", "Arándanos", "Vodka"],
+    price: "$ 17.900",
     glb: "/textura-azul.glb",
     color: "#1E88E5",
     gradientMid: "#42A5F5",
@@ -46,6 +49,7 @@ export const FLAVORS: Flavor[] = [
     description:
       "Dulcecito pero con malicia... no te confies.",
     ingredients: ["Kola", "Frutos rojos", "Whisky"],
+    price: "$ 17.900",
     glb: "/textura-berry.glb",
     color: "#E31245",
     gradientMid: "#F23B5F",
@@ -61,6 +65,7 @@ export const FLAVORS: Flavor[] = [
     description:
       `Sabe a parche, a calorcito y a "otro mas pues". Muy colombiano, muy chimba`,
     ingredients: ["Limón", "Lulo", "Ron"],
+    price: "$ 17.900",
     glb: "/textura-lulay.glb",
     color: "#A7CC39",
     gradientMid: "#C9DB55",
@@ -76,6 +81,7 @@ export const FLAVORS: Flavor[] = [
     description:
       "Fresquito pero traicionero... entra como como juguito y termina hablando solo.",
     ingredients: ["Limón", "Manzana verde", "Tequila"],
+    price: "$ 17.900",
     glb: "/textura-tropico.glb",
     color: "#31B49A",
     gradientMid: "#5FC07E",

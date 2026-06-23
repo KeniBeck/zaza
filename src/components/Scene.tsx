@@ -9,9 +9,10 @@ interface SceneProps {
   heroThreshold?: number
   firstCardEl?: HTMLElement | null
   glbUrl?: string
+  isFlipped?: boolean
 }
 
-export function Scene({ scrollYRef, heroThreshold = 0, firstCardEl = null, glbUrl }: SceneProps) {
+export function Scene({ scrollYRef, heroThreshold = 0, firstCardEl = null, glbUrl, isFlipped }: SceneProps) {
   const camera = useThree((s) => s.camera)
   const raycaster = useRef(new THREE.Raycaster())
   const mouse = useRef(new THREE.Vector2())
@@ -42,6 +43,7 @@ export function Scene({ scrollYRef, heroThreshold = 0, firstCardEl = null, glbUr
         heroThreshold={heroThreshold}
         targetPosition={targetPosition}
         glbUrl={glbUrl}
+        isFlipped={isFlipped}
       />
     </Suspense>
   )

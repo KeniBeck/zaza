@@ -1,0 +1,49 @@
+.snake-border {
+  position: relative;
+  isolation: isolate;
+}
+
+.snake-border::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  padding: 2px;
+
+  background:
+    conic-gradient(
+      from var(--angle),
+      transparent 0deg,
+      transparent 28deg,
+      var(--g1) 48deg,
+      var(--g2) 70deg,
+      white 88deg,
+      var(--g2) 108deg,
+      var(--g1) 130deg,
+      transparent 150deg,
+      transparent 360deg
+    );
+
+  animation: border-spin var(--speed, 3s) linear infinite;
+
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+
+  filter:
+    drop-shadow(0 0 4px var(--g1))
+    drop-shadow(0 0 10px var(--g2));
+
+  opacity: 0.95;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.snake-border:hover::before {
+  inset: -2.5px;
+  filter:
+    drop-shadow(0 0 6px var(--g1))
+    drop-shadow(0 0 16px var(--g2));
+}

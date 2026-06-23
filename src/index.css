@@ -1,5 +1,7 @@
 @import "tailwindcss";
 @import "./css/lava-blobs.css";
+@import "./css/gradient.css";
+@import "./css/flip-card.css";
 
 @font-face {
   font-family: "Brusher";
@@ -18,10 +20,6 @@
   100% { transform: translateX(200%); }
 }
 
-@keyframes spin-slow {
-  to { transform: rotate(360deg); }
-}
-
 #scene-canvas,
 #scene-canvas * {
   pointer-events: none !important;
@@ -31,6 +29,10 @@
   syntax: '<angle>';
   initial-value: 0deg;
   inherits: false;
+}
+
+@keyframes border-spin {
+  to { --angle: 360deg; }
 }
 
 @keyframes rotateBorder {
@@ -54,5 +56,4 @@
 @theme {
   --font-zaza: "Brusher", sans-serif;
   --animate-text-shimmer: text-shimmer 4s ease-in-out infinite;
-  --animate-spin-slow: spin-slow 4s linear infinite;
 }

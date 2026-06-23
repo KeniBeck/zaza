@@ -8,6 +8,8 @@ interface SaboresProps {
   onFirstCardReady?: (el: HTMLElement | null) => void
   activeFlavorIndex: number
   setActiveFlavorIndex: React.Dispatch<React.SetStateAction<number>>
+  isFlipped?: boolean
+  onFlip?: (flipped: boolean) => void
 }
 
 function hexToRgb(hex: string): string {
@@ -16,7 +18,7 @@ function hexToRgb(hex: string): string {
   return `${parseInt(c.substring(0,2),16)},${parseInt(c.substring(2,4),16)},${parseInt(c.substring(4,6),16)}`
 }
 
-export function Sabores({ onFirstCardReady, activeFlavorIndex, setActiveFlavorIndex }: SaboresProps) {
+export function Sabores({ onFirstCardReady, activeFlavorIndex, setActiveFlavorIndex, isFlipped, onFlip }: SaboresProps) {
   const sectionRef = useRef<HTMLElement>(null)
   const cardRef = useRef<HTMLDivElement>(null)
   const [showInfo, setShowInfo] = useState(false)
@@ -106,6 +108,8 @@ export function Sabores({ onFirstCardReady, activeFlavorIndex, setActiveFlavorIn
           onInfo={() => setShowInfo(true)}
           onPrev={handlePrev}
           onNext={handleNext}
+          isFlipped={isFlipped}
+          onFlip={onFlip}
         />
 
         {/* Desktop: current card grid */}
