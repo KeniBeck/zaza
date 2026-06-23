@@ -6,14 +6,13 @@ import { TbHandClick, TbShoppingCart } from "react-icons/tb"
 interface MobileFlavorCardProps {
   flavor: Flavor
   cardRef: (el: HTMLDivElement | null) => void
-  onInfo: () => void
   onPrev: () => void
   onNext: () => void
   isFlipped?: boolean
   onFlip?: (flipped: boolean) => void
 }
 
-export function MobileFlavorCard({ flavor, cardRef, onInfo, onPrev, onNext, isFlipped, onFlip }: MobileFlavorCardProps) {
+export function MobileFlavorCard({ flavor, cardRef, onPrev, onNext, isFlipped, onFlip }: MobileFlavorCardProps) {
   const { mobileScale } = useScreenSize()
 
   const cardHeight = mobileScale("410px", "410px", "430px", "500px", "410px")
