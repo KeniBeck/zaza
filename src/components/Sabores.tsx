@@ -105,7 +105,6 @@ export function Sabores({ onFirstCardReady, activeFlavorIndex, setActiveFlavorIn
         <MobileFlavorCard
           flavor={activeFlavor}
           cardRef={handleCardRef}
-          onInfo={() => setShowInfo(true)}
           onPrev={handlePrev}
           onNext={handleNext}
           isFlipped={isFlipped}
