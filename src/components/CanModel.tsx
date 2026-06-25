@@ -27,23 +27,8 @@ const HERO_Y_MOBILE =
 const SCROLL_X_RANGE_DESKTOP = 0.5
 const SCROLL_X_RANGE_MOBILE = -0.01
 const SCROLL_Y_RANGE_DESKTOP = 0.2
-const SCROLL_Y_RANGE_MOBILE = 0.2
-const TRANSITION_RANGE = 600
-const CARD_X_DESKTOP = -1.5
-const CARD_X_MOBILE = -0.08
-const CARD_Y_DESKTOP = -0.1
-const CARD_Y_MOBILE =
-screenW === 390 && screenH === 676 ? 0.2 :
-screenW <= 375 && screenH >= 644 ? -0.08 :
-  screenW < 375
-    ? 0.08    // Mini/SE — funciona bien actualmente
-    : screenW < 393
-      ? 0.05    // iPhone 13/14 estándar
-      : screenW < 430
-        ? -0.06    // iPhone 14 Pro
-        : -0.35    // iPhone 14 Pro Max y más grandes
-
-
+const SCROLL_Y_RANGE_MOBILE = screenW <= 360 && screenH >= 700 ? 0.3 :
+  screenW > 410 ? 0.3 : 0.2
 const DURATION = 0.8
 const DROP_HEIGHT_DESKTOP = 0.6
 const DROP_HEIGHT_MOBILE = 0.45
@@ -55,20 +40,17 @@ function easeOutCubic(t: number): number {
 interface CanModelProps {
   scrollYRef?: React.MutableRefObject<number>
   heroThreshold?: number
-  targetPosition?: THREE.Vector3 | null
   glbUrl?: string
-  cardYOverride?: number | null
   isFlipped?: boolean
 }
 
-export function CanModel({ scrollYRef, heroThreshold = 0, targetPosition = null, glbUrl, cardYOverride, isFlipped }: CanModelProps) {
+export function CanModel({ scrollYRef, heroThreshold = 0, glbUrl, isFlipped }: CanModelProps) {
   const groupRef = useRef<THREE.Group>(null)
   const rotateRef = useRef<THREE.Group>(null)
   const startTime = useRef(0)
   const animDone = useRef(false)
   const flipProgress = useRef(0)
   const materialsRef = useRef<THREE.MeshStandardMaterial[]>([])
-
   const config = useMemo(() => {
     const isMobile = window.innerWidth < MOBILE_BREAKPOINT
     return {
@@ -78,13 +60,10 @@ export function CanModel({ scrollYRef, heroThreshold = 0, targetPosition = null,
       dropHeight: isMobile ? DROP_HEIGHT_MOBILE : DROP_HEIGHT_DESKTOP,
       scrollXRange: isMobile ? SCROLL_X_RANGE_MOBILE : SCROLL_X_RANGE_DESKTOP,
       scrollYRange: isMobile ? SCROLL_Y_RANGE_MOBILE : SCROLL_Y_RANGE_DESKTOP,
-      cardX: isMobile ? CARD_X_MOBILE : CARD_X_DESKTOP,
-      cardY: isMobile ? CARD_Y_MOBILE : CARD_Y_DESKTOP,
     }
   }, [])
 
   const pos = useRef(new THREE.Vector3(config.heroX, config.heroY + config.dropHeight, 0))
-  const lerpTarget = useRef(new THREE.Vector3())
 
   const modelUrl = glbUrl ? asset(glbUrl) : asset("/textura-morada.glb")
   const { scene } = useGLTF(modelUrl)
@@ -150,18 +129,6 @@ export function CanModel({ scrollYRef, heroThreshold = 0, targetPosition = null,
     const scaleMultiplier = 1 - Math.sin(flipAngle) * 0.15
     groupRef.current.scale.setScalar(modelScale * scaleMultiplier)
 
-    // Opacidad en materiales durante el flip
-    const shouldHide = flipProgress.current > 0.5
-    const targetOpacity = shouldHide ? 0 : 1
-
-    materialsRef.current.forEach(mat => {
-      mat.transparent = true
-      mat.opacity += (targetOpacity - mat.opacity) * 0.15
-      mat.needsUpdate = true
-    })
-
-    groupRef.current.visible = materialsRef.current.some(m => m.opacity > 0.01)
-
     const elapsed = clock.elapsedTime - startTime.current
 
     if (!animDone.current) {
@@ -176,7 +143,8 @@ export function CanModel({ scrollYRef, heroThreshold = 0, targetPosition = null,
       }
     }
 
-    const scrollY = scrollYRef?.current ?? 0
+    const rawScrollY = scrollYRef?.current ?? 0
+    const scrollY = Math.min(rawScrollY, heroThreshold)
     const scrollProgress = Math.min(scrollY / Math.max(heroThreshold, 1), 1)
 
     const rawEnvelope = Math.sin(Math.min(scrollProgress * Math.PI, Math.PI))
@@ -192,16 +160,18 @@ export function CanModel({ scrollYRef, heroThreshold = 0, targetPosition = null,
       pos.current.y = config.heroY + scrollProgress * (-config.scrollYRange)
     }
 
-    if (scrollY > heroThreshold) {
-      const t = Math.min((scrollY - heroThreshold) / TRANSITION_RANGE, 1)
-      const smoothT = 1 - Math.pow(1 - t, 3)
-      lerpTarget.current.x = config.cardX
-      lerpTarget.current.y = cardYOverride ?? config.cardY
-      lerpTarget.current.z = targetPosition?.z ?? 0
-      groupRef.current.position.lerpVectors(pos.current, lerpTarget.current, smoothT)
-    } else {
-      groupRef.current.position.copy(pos.current)
-    }
+    groupRef.current.position.copy(pos.current)
+
+    const flipShouldHide = flipProgress.current > 0.5
+    const targetOpacity = flipShouldHide ? 0 : 1
+
+    materialsRef.current.forEach(mat => {
+      mat.transparent = true
+      mat.opacity += (targetOpacity - mat.opacity) * 0.15
+      mat.needsUpdate = true
+    })
+
+    groupRef.current.visible = materialsRef.current.some(m => m.opacity > 0.01)
   })
 
   return (
