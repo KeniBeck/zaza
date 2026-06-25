@@ -6,6 +6,7 @@ import { ErrorBoundary } from "../components/ErrorBoundary"
 import { Navbar } from "../components/Navbar"
 import { About } from "../components/About"
 import { Sabores } from "../components/Sabores"
+import { QuienesSomos } from "../components/QuienesSomos"
 import { ZazaLogo } from "../components/ZazaLogo"
 import { FLAVORS } from "../data/flavors"
 import { asset } from "../constants"
@@ -49,15 +50,47 @@ export function Home({ bgColor = "#F3E8FF" }: HomeProps) {
   const flavorCardRef = useRef<HTMLElement | null>(null)
   const [activeFlavorIndex, setActiveFlavorIndex] = useState(0)
   const [isFlipped, setIsFlipped] = useState(false)
+  const [canvasFixed, setCanvasFixed] = useState(true)
+  const canvasPinnedTop = useRef(0)
   const activeFlavor = FLAVORS[activeFlavorIndex]
 
   const heroThreshold = useMemo(() => window.innerHeight, [])
 
   useEffect(() => {
-    const handleScroll = () => { scrollYRef.current = window.scrollY }
-    window.addEventListener("scroll", handleScroll, { passive: true })
-    return () => window.removeEventListener("scroll", handleScroll)
-  }, [])
+    if (!modelReady) return
+
+    let triggerPoint = 0
+
+    const calcBounds = () => {
+      const el = document.getElementById('productos')
+      if (!el) return
+      triggerPoint = el.offsetTop + el.offsetHeight - window.innerHeight
+    }
+
+    const handleScroll = () => {
+      scrollYRef.current = window.scrollY
+      const shouldBeFixed = window.scrollY <= triggerPoint
+      setCanvasFixed(shouldBeFixed)
+      if (!shouldBeFixed) {
+        canvasPinnedTop.current = triggerPoint
+      }
+    }
+
+    const handleResize = () => {
+      calcBounds()
+      handleScroll()
+    }
+
+    calcBounds()
+    handleScroll()
+
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    window.addEventListener('resize', handleResize)
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+      window.removeEventListener('resize', handleResize)
+    }
+  }, [modelReady])
 
   const handleFirstCardReady = useCallback((el: HTMLElement | null) => {
     setFirstCardEl(el)
@@ -90,7 +123,14 @@ export function Home({ bgColor = "#F3E8FF" }: HomeProps) {
       <Navbar color={activeFlavor.color} gradientEnd={activeFlavor.gradientEnd} borderColor={activeFlavor.color} />
 
       <ErrorBoundary key={canvasKey} onError={handleCanvasError}>
-        <div id="scene-canvas" className="fixed inset-0 z-40 pointer-events-none">
+        <div
+          id="scene-canvas"
+          className="z-40 pointer-events-none"
+          style={canvasFixed
+            ? { position: 'fixed', inset: 0 }
+            : { position: 'absolute', top: `${canvasPinnedTop.current}px`, left: 0, right: 0, height: '100vh' }
+          }
+        >
           <Canvas
             key={canvasKey}
             camera={{ position: [0, 0.05, 4], fov: 45 }}
@@ -132,6 +172,11 @@ export function Home({ bgColor = "#F3E8FF" }: HomeProps) {
           setActiveFlavorIndex={setActiveFlavorIndex}
           isFlipped={isFlipped}
           onFlip={setIsFlipped}
+        />
+        <QuienesSomos
+          gradientStart={activeFlavor.color}
+          gradientMid={activeFlavor.gradientMid}
+          gradientEnd={activeFlavor.gradientEnd}
         />
       </div>
     </div>
