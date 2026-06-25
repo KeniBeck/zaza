@@ -50,8 +50,6 @@ export function Home({ bgColor = "#F3E8FF" }: HomeProps) {
   const flavorCardRef = useRef<HTMLElement | null>(null)
   const [activeFlavorIndex, setActiveFlavorIndex] = useState(0)
   const [isFlipped, setIsFlipped] = useState(false)
-  const [canvasFixed, setCanvasFixed] = useState(true)
-  const canvasPinnedTop = useRef(0)
   const activeFlavor = FLAVORS[activeFlavorIndex]
 
   const heroThreshold = useMemo(() => window.innerHeight, [])
@@ -67,22 +65,38 @@ export function Home({ bgColor = "#F3E8FF" }: HomeProps) {
       triggerPoint = el.offsetTop + el.offsetHeight - window.innerHeight
     }
 
+    const applyCanvasStyle = () => {
+      const canvas = document.getElementById('scene-canvas')
+      if (!canvas) return
+      if (window.scrollY <= triggerPoint) {
+        canvas.style.position = 'fixed'
+        canvas.style.top = '0'
+        canvas.style.left = '0'
+        canvas.style.right = '0'
+        canvas.style.bottom = '0'
+        canvas.style.height = ''
+      } else {
+        canvas.style.position = 'absolute'
+        canvas.style.top = `${triggerPoint}px`
+        canvas.style.left = '0'
+        canvas.style.right = '0'
+        canvas.style.bottom = ''
+        canvas.style.height = '100vh'
+      }
+    }
+
     const handleScroll = () => {
       scrollYRef.current = window.scrollY
-      const shouldBeFixed = window.scrollY <= triggerPoint
-      setCanvasFixed(shouldBeFixed)
-      if (!shouldBeFixed) {
-        canvasPinnedTop.current = triggerPoint
-      }
+      applyCanvasStyle()
     }
 
     const handleResize = () => {
       calcBounds()
-      handleScroll()
+      applyCanvasStyle()
     }
 
     calcBounds()
-    handleScroll()
+    applyCanvasStyle()
 
     window.addEventListener('scroll', handleScroll, { passive: true })
     window.addEventListener('resize', handleResize)
@@ -126,10 +140,7 @@ export function Home({ bgColor = "#F3E8FF" }: HomeProps) {
         <div
           id="scene-canvas"
           className="z-40 pointer-events-none"
-          style={canvasFixed
-            ? { position: 'fixed', inset: 0 }
-            : { position: 'absolute', top: `${canvasPinnedTop.current}px`, left: 0, right: 0, height: '100vh' }
-          }
+          style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0 }}
         >
           <Canvas
             key={canvasKey}
