@@ -48,6 +48,7 @@ export function Home({ bgColor = "#F3E8FF" }: HomeProps) {
   const [canvasKey, setCanvasKey] = useState(0)
   const retried = useRef(false)
   const flavorCardRef = useRef<HTMLElement | null>(null)
+  const applyCanvasStyleRef = useRef<() => void>(() => {})
   const [activeFlavorIndex, setActiveFlavorIndex] = useState(0)
   const [isFlipped, setIsFlipped] = useState(false)
   const activeFlavor = FLAVORS[activeFlavorIndex]
@@ -84,6 +85,7 @@ export function Home({ bgColor = "#F3E8FF" }: HomeProps) {
         canvas.style.height = '100vh'
       }
     }
+    applyCanvasStyleRef.current = applyCanvasStyle
 
     const handleScroll = () => {
       scrollYRef.current = window.scrollY
@@ -98,11 +100,22 @@ export function Home({ bgColor = "#F3E8FF" }: HomeProps) {
     calcBounds()
     applyCanvasStyle()
 
+    let scrollEndTimer: ReturnType<typeof setTimeout>
+    const handleScrollEnd = () => {
+      clearTimeout(scrollEndTimer)
+      scrollEndTimer = setTimeout(() => {
+        applyCanvasStyle()
+      }, 50)
+    }
+
     window.addEventListener('scroll', handleScroll, { passive: true })
+    window.addEventListener('scroll', handleScrollEnd, { passive: true })
     window.addEventListener('resize', handleResize)
     return () => {
       window.removeEventListener('scroll', handleScroll)
+      window.removeEventListener('scroll', handleScrollEnd)
       window.removeEventListener('resize', handleResize)
+      clearTimeout(scrollEndTimer)
     }
   }, [modelReady])
 
