@@ -58,17 +58,14 @@ export function Home({ bgColor = "#F3E8FF" }: HomeProps) {
   useEffect(() => {
     if (!modelReady) return
 
-    let triggerPoint = 0
-
-    const calcBounds = () => {
-      const el = document.getElementById('productos')
-      if (!el) return
-      triggerPoint = el.offsetTop + el.offsetHeight - window.innerHeight
-    }
-
     const applyCanvasStyle = () => {
       const canvas = document.getElementById('scene-canvas')
-      if (!canvas) return
+      const productos = document.getElementById('productos')
+      if (!canvas || !productos) return
+
+      // Recalculate live every time — never stale
+      const triggerPoint = productos.offsetTop + productos.offsetHeight - window.innerHeight
+
       if (window.scrollY <= triggerPoint) {
         canvas.style.position = 'fixed'
         canvas.style.top = '0'
@@ -85,6 +82,7 @@ export function Home({ bgColor = "#F3E8FF" }: HomeProps) {
         canvas.style.height = '100vh'
       }
     }
+
     applyCanvasStyleRef.current = applyCanvasStyle
 
     const handleScroll = () => {
@@ -92,30 +90,28 @@ export function Home({ bgColor = "#F3E8FF" }: HomeProps) {
       applyCanvasStyle()
     }
 
-    const handleResize = () => {
-      calcBounds()
-      applyCanvasStyle()
-    }
-
-    calcBounds()
-    applyCanvasStyle()
-
-    let scrollEndTimer: ReturnType<typeof setTimeout>
-    const handleScrollEnd = () => {
-      clearTimeout(scrollEndTimer)
-      scrollEndTimer = setTimeout(() => {
+    // rAF loop — catches smooth scroll jumps that fire no scroll events
+    let rafId: number
+    let lastScrollY = window.scrollY
+    const rafLoop = () => {
+      if (window.scrollY !== lastScrollY) {
+        lastScrollY = window.scrollY
+        scrollYRef.current = window.scrollY
         applyCanvasStyle()
-      }, 50)
+      }
+      rafId = requestAnimationFrame(rafLoop)
     }
+    rafId = requestAnimationFrame(rafLoop)
 
     window.addEventListener('scroll', handleScroll, { passive: true })
-    window.addEventListener('scroll', handleScrollEnd, { passive: true })
-    window.addEventListener('resize', handleResize)
+    window.addEventListener('resize', applyCanvasStyle)
+
+    applyCanvasStyle()
+
     return () => {
       window.removeEventListener('scroll', handleScroll)
-      window.removeEventListener('scroll', handleScrollEnd)
-      window.removeEventListener('resize', handleResize)
-      clearTimeout(scrollEndTimer)
+      window.removeEventListener('resize', applyCanvasStyle)
+      cancelAnimationFrame(rafId)
     }
   }, [modelReady])
 
