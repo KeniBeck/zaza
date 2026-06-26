@@ -43,6 +43,7 @@ function LoadingSplash() {
 
 export function Home({ bgColor = "#F3E8FF" }: HomeProps) {
   const scrollYRef = useRef(0)
+  const pinnedTopRef = useRef<number | null>(null)
   const [modelReady, setModelReady] = useState(false)
   const [canvasKey, setCanvasKey] = useState(0)
   const retried = useRef(false)
@@ -60,22 +61,29 @@ export function Home({ bgColor = "#F3E8FF" }: HomeProps) {
       const productos = document.getElementById('productos')
       if (!canvas || !productos) return
 
-      // Recalculate live every time — never stale
       const triggerPoint = productos.offsetTop
       if (window.scrollY <= triggerPoint) {
-        canvas.style.position = 'fixed'
-        canvas.style.top = '0'
-        canvas.style.left = '0'
-        canvas.style.right = '0'
-        canvas.style.bottom = '0'
-        canvas.style.height = ''
+        pinnedTopRef.current = null
+        Object.assign(canvas.style, {
+          position: 'fixed',
+          top: '0',
+          left: '0',
+          right: '0',
+          bottom: '0',
+          height: '',
+        })
       } else {
-        canvas.style.position = 'absolute'
-        canvas.style.top = `${productos.getBoundingClientRect().top + window.scrollY}px`
-        canvas.style.left = '0'
-        canvas.style.right = '0'
-        canvas.style.bottom = ''
-        canvas.style.height = `${window.innerHeight}px`
+        if (pinnedTopRef.current === null) {
+          pinnedTopRef.current = Math.round(productos.offsetTop)
+        }
+        Object.assign(canvas.style, {
+          position: 'absolute',
+          top: `${pinnedTopRef.current}px`,
+          left: '0',
+          right: '0',
+          bottom: '',
+          height: `${window.innerHeight}px`,
+        })
         scrollYRef.current = heroThreshold
       }
     }
@@ -105,14 +113,12 @@ export function Home({ bgColor = "#F3E8FF" }: HomeProps) {
     rafId = requestAnimationFrame(rafLoop)
     window.addEventListener('resize', applyCanvasStyle)
     window.visualViewport?.addEventListener('resize', applyCanvasStyle)
-    window.visualViewport?.addEventListener('scroll', applyCanvasStyle)
 
     applyCanvasStyle()
 
     return () => {
       window.removeEventListener('resize', applyCanvasStyle)
       window.visualViewport?.removeEventListener('resize', applyCanvasStyle)
-      window.visualViewport?.removeEventListener('scroll', applyCanvasStyle)
       cancelAnimationFrame(rafId)
     }
   }, [modelReady])
