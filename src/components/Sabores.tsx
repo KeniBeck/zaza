@@ -19,7 +19,6 @@ function hexToRgb(hex: string): string {
 
 export function Sabores({ activeFlavorIndex, setActiveFlavorIndex, isFlipped, onFlip }: SaboresProps) {
   const sectionRef = useRef<HTMLElement>(null)
-  const cardRef = useRef<HTMLDivElement>(null)
   const [showInfo, setShowInfo] = useState(false)
   const activeFlavor = FLAVORS[activeFlavorIndex]
   const blobRgb = hexToRgb(activeFlavor.color)
