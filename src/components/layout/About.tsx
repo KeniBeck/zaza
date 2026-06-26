@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react"
-import { WHATSAPP_URL, asset } from "../constants";
-import { ZazaLogo } from "./ZazaLogo";
-import { useScreenSize } from "../hooks/useScreenSize";
+import { WHATSAPP_URL, asset } from "../../constants";
+import { ZazaLogo } from "../shared/ZazaLogo";
+import { useScreenSize } from "../../hooks/useScreenSize";
 
 function smoothScrollTo(targetY: number, duration: number) {
     const startY = window.scrollY
@@ -198,12 +198,12 @@ export function About({
 
                 {/* PNG hojas decorativas */}
                 <img
-                    src={asset("/decor/hoja-one.png")}
+                    src={asset("/decor/hoja-one.webp")}
                     alt=""
                     className="absolute top-22 left-2 sm:top-16 sm:left-16 w-30 sm:w-36 md:w-76 pointer-events-none select-none opacity-90"
                 />
                 <img
-                    src={asset("/decor/hoja-one-bottom.png")}
+                    src={asset("/decor/hoja-one-bottom.webp")}
                     alt=""
                     className="absolute bottom-8 right-2 sm:bottom-16 sm:right-16 w-30 sm:w-36 md:w-76 pointer-events-none select-none opacity-90"
                 />

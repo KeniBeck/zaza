@@ -1,0 +1,110 @@
+import { useState, useCallback } from "react"
+import { BackgroundBlobs } from "../shared/BackgroundBlobs"
+import { BubbleSvg } from "../shared/BubbleSvg"
+import { InstagramGrid } from "../stories/InstagramGrid"
+import { StoryModal } from "../stories/StoryModal"
+
+interface QuienesSomosProps {
+  gradientStart?: string
+  gradientMid?: string
+  gradientEnd?: string
+}
+
+export function QuienesSomos({
+  gradientStart = "#6B318B",
+  gradientMid = "#A855F7",
+  gradientEnd = "#C084FC",
+}: QuienesSomosProps) {
+  const [viewerOpen, setViewerOpen] = useState(false)
+  const [activeStory, setActiveStory] = useState(0)
+
+  const handleImageClick = useCallback((index: number) => {
+    setActiveStory(index)
+    setViewerOpen(true)
+  }, [])
+
+  const handleClose = useCallback(() => {
+    setViewerOpen(false)
+  }, [])
+
+  return (
+    <section id="nosotros" className="relative min-h-screen w-full flex flex-col items-center justify-center px-5 py-24 overflow-hidden">
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{ background: "linear-gradient(160deg, #1a0a2e 0%, #2d1155 50%, #1a0a2e 100%)" }}
+      >
+        <BackgroundBlobs
+          gradientStart={gradientStart}
+          gradientMid={gradientMid}
+          gradientEnd={gradientEnd}
+        />
+        <BubbleSvg
+          gradientStart={gradientStart}
+          gradientMid={gradientMid}
+          gradientEnd={gradientEnd}
+        />
+      </div>
+
+      <div className="relative z-10 flex flex-col items-start gap-6 w-full max-w-sm">
+        <p className="font-sans text-xs tracking-[4px] uppercase font-semibold" style={{ color: gradientEnd }}>
+          ¿Quiénes somos?
+        </p>
+
+        <h2 style={{ fontSize: "52px", fontWeight: 900, lineHeight: 1, color: "#fff", letterSpacing: "-1px" }}>
+          Somos<br />
+          <span
+            style={{
+              color: "transparent",
+              WebkitTextStroke: `2px ${gradientEnd}`,
+              fontFamily: "var(--font-zaza)",
+            }}
+          >
+            parche.
+          </span>
+        </h2>
+
+        <div
+          className="relative rounded-[20px] p-5 backdrop-blur-xl bg-white/5 overflow-hidden"
+          style={{ border: `1px solid ${gradientEnd}30` }}
+        >
+          <div className="absolute top-0 left-4 right-4 h-px bg-gradient-to-r from-transparent via-white/40 to-transparent rounded-full" />
+          <p className="text-sm leading-relaxed text-white/75">
+            Nacimos para acompañar esos momentos que{" "}
+            <strong className="font-bold" style={{ color: gradientEnd }}>
+              no se planean
+            </strong>{" "}
+            pero terminan siendo los mejores. Creamos bebidas con sabor,
+            actitud y la energía necesaria para convertir cualquier ocasión
+            en una buena historia.
+          </p>
+        </div>
+
+        <p className="text-base font-bold text-white leading-snug pl-4" style={{ borderLeft: `3px solid ${gradientEnd}` }}>
+          Porque la vida sabe mejor cuando se vive a tu manera.
+        </p>
+
+        <div className="flex items-center gap-3 w-full">
+          <span className="text-[11px] tracking-[3px] uppercase font-semibold" style={{ color: `${gradientEnd}80` }}>
+            Galería
+          </span>
+          <div className="flex-1 h-px" style={{ background: `${gradientEnd}20` }} />
+        </div>
+
+        <InstagramGrid
+          gradientStart={gradientStart}
+          gradientEnd={gradientEnd}
+          onImageClick={handleImageClick}
+        />
+      </div>
+
+      <StoryModal
+        open={viewerOpen}
+        initialIndex={activeStory}
+        gradientStart={gradientStart}
+        gradientMid={gradientMid}
+        gradientEnd={gradientEnd}
+        onClose={handleClose}
+      />
+    </section>
+  )
+}

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
-import { ZazaLogo } from "./ZazaLogo"
-import { WHATSAPP_URL } from "../constants"
+import { ZazaLogo } from "../shared/ZazaLogo"
+import { WHATSAPP_URL } from "../../constants"
 
 const NAV_LINKS = [
   { label: "Inicio", href: "#inicio" },

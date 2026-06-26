@@ -2,7 +2,7 @@ import { useRef, useMemo, useEffect } from "react"
 import { useFrame } from "@react-three/fiber"
 import { useGLTF } from "@react-three/drei"
 import * as THREE from "three"
-import { asset } from "../constants"
+import { asset } from "../../constants"
 
 const MODEL_SCALE_DESKTOP = 0.098
 const MODEL_SCALE_MOBILE = 0.075

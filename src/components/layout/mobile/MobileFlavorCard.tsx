@@ -1,6 +1,6 @@
-import type { Flavor } from "../../data/flavors"
+import type { Flavor } from "../../../data/flavors"
 import { TiArrowLeftOutline, TiArrowRightOutline } from "react-icons/ti"
-import { useScreenSize } from "../../hooks/useScreenSize"
+import { useScreenSize } from "../../../hooks/useScreenSize"
 import { TbHandClick, TbShoppingCart } from "react-icons/tb"
 
 interface MobileFlavorCardProps {
