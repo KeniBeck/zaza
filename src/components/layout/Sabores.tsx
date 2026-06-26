@@ -1,8 +1,8 @@
 import { useRef, useState, useCallback, useEffect } from "react"
-import { FlavorCard } from "./FlavorCard"
+import { FlavorCard } from "../shared/FlavorCard"
 import { InfoModal } from "./mobile/InfoModal"
 import { MobileFlavorCard } from "./mobile/MobileFlavorCard"
-import { FLAVORS } from "../data/flavors"
+import { FLAVORS } from "../../data/flavors"
 
 interface SaboresProps {
   activeFlavorIndex: number

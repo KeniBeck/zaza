@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react"
 import { createPortal } from "react-dom"
-import type { Flavor } from "../../data/flavors"
-import { PRODUCT_PRICE } from "../../constants"
+import type { Flavor } from "../../../data/flavors"
+import { PRODUCT_PRICE } from "../../../constants"
 
 interface InfoModalProps {
   flavor: Flavor

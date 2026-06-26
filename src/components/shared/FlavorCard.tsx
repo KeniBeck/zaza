@@ -1,5 +1,5 @@
 import { useRef } from "react"
-import type { Flavor } from "../data/flavors"
+import type { Flavor } from "../../data/flavors"
 
 interface FlavorCardProps {
   flavor: Flavor
