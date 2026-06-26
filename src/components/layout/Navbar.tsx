@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react"
 import { ZazaLogo } from "../shared/ZazaLogo"
 import { WHATSAPP_URL } from "../../constants"
+import { smoothScrollTo } from "../../utils/scroll"
 
 const NAV_LINKS = [
   { label: "Inicio", href: "#inicio" },
@@ -55,8 +56,11 @@ export function Navbar({ borderColor = "#722f96", color = "#6B318B", gradientEnd
             const isActive = activeSection === link.href.slice(1)
             return (
               <li key={link.href}>
-                <a
-                  href={link.href}
+                <button
+                  onClick={() => {
+                    const el = document.getElementById(link.href.slice(1))
+                    if (el) smoothScrollTo(el.getBoundingClientRect().top + window.scrollY, 800)
+                  }}
                   className="px-4 py-2 text-sm font-medium rounded-xl transition-all"
                   style={{
                     color: isActive ? "#FFF" : undefined,
@@ -77,7 +81,7 @@ export function Navbar({ borderColor = "#722f96", color = "#6B318B", gradientEnd
                   }}
                 >
                   {link.label}
-                </a>
+                </button>
               </li>
             )
           })}
@@ -134,16 +138,19 @@ export function Navbar({ borderColor = "#722f96", color = "#6B318B", gradientEnd
               const isActive = activeSection === link.href.slice(1)
               return (
                 <li key={link.href}>
-                  <a
-                    href={link.href}
-                    onClick={() => setOpen(false)}
-                    className="block text-sm font-medium transition-colors"
+                  <button
+                    onClick={() => {
+                      setOpen(false)
+                      const el = document.getElementById(link.href.slice(1))
+                      if (el) smoothScrollTo(el.getBoundingClientRect().top + window.scrollY, 800)
+                    }}
+                    className="block w-full text-left text-sm font-medium transition-colors"
                     style={{ color: isActive ? color : undefined, fontWeight: isActive ? 600 : undefined }}
                     onMouseEnter={(e) => { if (!isActive) e.currentTarget.style.color = color }}
                     onMouseLeave={(e) => { if (!isActive) e.currentTarget.style.color = "#6B7280" }}
                   >
                     {link.label}
-                  </a>
+                  </button>
                 </li>
               )
             })}
