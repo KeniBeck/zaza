@@ -71,11 +71,11 @@ export function Home({ bgColor = "#F3E8FF" }: HomeProps) {
         canvas.style.height = ''
       } else {
         canvas.style.position = 'absolute'
-        canvas.style.top = `${triggerPoint}px`
+        canvas.style.top = `${productos.getBoundingClientRect().top + window.scrollY}px`
         canvas.style.left = '0'
         canvas.style.right = '0'
         canvas.style.bottom = ''
-        canvas.style.height = '100vh'
+        canvas.style.height = `${window.innerHeight}px`
         scrollYRef.current = heroThreshold
       }
     }
@@ -104,11 +104,15 @@ export function Home({ bgColor = "#F3E8FF" }: HomeProps) {
     }
     rafId = requestAnimationFrame(rafLoop)
     window.addEventListener('resize', applyCanvasStyle)
+    window.visualViewport?.addEventListener('resize', applyCanvasStyle)
+    window.visualViewport?.addEventListener('scroll', applyCanvasStyle)
 
     applyCanvasStyle()
 
     return () => {
       window.removeEventListener('resize', applyCanvasStyle)
+      window.visualViewport?.removeEventListener('resize', applyCanvasStyle)
+      window.visualViewport?.removeEventListener('scroll', applyCanvasStyle)
       cancelAnimationFrame(rafId)
     }
   }, [modelReady])
