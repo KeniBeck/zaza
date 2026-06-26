@@ -5,7 +5,6 @@ import { MobileFlavorCard } from "./mobile/MobileFlavorCard"
 import { FLAVORS } from "../data/flavors"
 
 interface SaboresProps {
-  onFirstCardReady?: (el: HTMLElement | null) => void
   activeFlavorIndex: number
   setActiveFlavorIndex: React.Dispatch<React.SetStateAction<number>>
   isFlipped?: boolean
@@ -18,7 +17,7 @@ function hexToRgb(hex: string): string {
   return `${parseInt(c.substring(0,2),16)},${parseInt(c.substring(2,4),16)},${parseInt(c.substring(4,6),16)}`
 }
 
-export function Sabores({ onFirstCardReady, activeFlavorIndex, setActiveFlavorIndex, isFlipped, onFlip }: SaboresProps) {
+export function Sabores({ activeFlavorIndex, setActiveFlavorIndex, isFlipped, onFlip }: SaboresProps) {
   const sectionRef = useRef<HTMLElement>(null)
   const cardRef = useRef<HTMLDivElement>(null)
   const [showInfo, setShowInfo] = useState(false)
@@ -40,11 +39,6 @@ export function Sabores({ onFirstCardReady, activeFlavorIndex, setActiveFlavorIn
     })
     setActiveBgLayer(nextLayer)
   }, [activeFlavorIndex])
-
-  const handleCardRef = useCallback((el: HTMLDivElement | null) => {
-    cardRef.current = el
-    if (onFirstCardReady) onFirstCardReady(el)
-  }, [onFirstCardReady])
 
   const handleNext = useCallback(() => {
     setShowInfo(false)
@@ -104,7 +98,6 @@ export function Sabores({ onFirstCardReady, activeFlavorIndex, setActiveFlavorIn
 
         <MobileFlavorCard
           flavor={activeFlavor}
-          cardRef={handleCardRef}
           onPrev={handlePrev}
           onNext={handleNext}
           isFlipped={isFlipped}
@@ -118,11 +111,6 @@ export function Sabores({ onFirstCardReady, activeFlavorIndex, setActiveFlavorIn
               key={flavor.id}
               flavor={flavor}
               isFirst={i === 0}
-              onFirstCardRef={
-                i === 0
-                  ? (el) => { if (onFirstCardReady) onFirstCardReady(el) }
-                  : undefined
-              }
             />
           ))}
         </div>

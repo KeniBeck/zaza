@@ -4,19 +4,15 @@ import type { Flavor } from "../data/flavors"
 interface FlavorCardProps {
   flavor: Flavor
   isFirst?: boolean
-  onFirstCardRef?: (el: HTMLDivElement | null) => void
 }
 
-export function FlavorCard({ flavor, isFirst, onFirstCardRef }: FlavorCardProps) {
+export function FlavorCard({ flavor, isFirst }: FlavorCardProps) {
   const localRef = useRef<HTMLDivElement>(null)
   const isMobile = window.innerWidth < 768
 
   return (
     <div
-      ref={(el) => {
-        localRef.current = el
-        if (isFirst && onFirstCardRef) onFirstCardRef(el)
-      }}
+      ref={(el) => { localRef.current = el }}
       id={isFirst ? "first-flavor-card" : undefined}
       className="group w-[260px] flex-shrink-0 snap-center flex flex-col items-center justify-center gap-4 px-7 py-16 rounded-3xl
         bg-white/10 md:bg-white/60

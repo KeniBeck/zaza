@@ -43,12 +43,9 @@ function LoadingSplash() {
 
 export function Home({ bgColor = "#F3E8FF" }: HomeProps) {
   const scrollYRef = useRef(0)
-  const [firstCardEl, setFirstCardEl] = useState<HTMLElement | null>(null)
   const [modelReady, setModelReady] = useState(false)
   const [canvasKey, setCanvasKey] = useState(0)
   const retried = useRef(false)
-  const flavorCardRef = useRef<HTMLElement | null>(null)
-  const applyCanvasStyleRef = useRef<() => void>(() => {})
   const [activeFlavorIndex, setActiveFlavorIndex] = useState(0)
   const [isFlipped, setIsFlipped] = useState(false)
   const activeFlavor = FLAVORS[activeFlavorIndex]
@@ -64,8 +61,7 @@ export function Home({ bgColor = "#F3E8FF" }: HomeProps) {
       if (!canvas || !productos) return
 
       // Recalculate live every time — never stale
-      const triggerPoint = productos.offsetTop + productos.offsetHeight - window.innerHeight
-
+      const triggerPoint = productos.offsetTop
       if (window.scrollY <= triggerPoint) {
         canvas.style.position = 'fixed'
         canvas.style.top = '0'
@@ -80,45 +76,42 @@ export function Home({ bgColor = "#F3E8FF" }: HomeProps) {
         canvas.style.right = '0'
         canvas.style.bottom = ''
         canvas.style.height = '100vh'
+        scrollYRef.current = heroThreshold
       }
-    }
-
-    applyCanvasStyleRef.current = applyCanvasStyle
-
-    const handleScroll = () => {
-      scrollYRef.current = window.scrollY
-      applyCanvasStyle()
     }
 
     // rAF loop — catches smooth scroll jumps that fire no scroll events
     let rafId: number
     let lastScrollY = window.scrollY
     const rafLoop = () => {
-      if (window.scrollY !== lastScrollY) {
-        lastScrollY = window.scrollY
-        scrollYRef.current = window.scrollY
+      const currentScrollY = window.scrollY
+      const productos = document.getElementById('productos')
+      const saboresStart = productos ? productos.offsetTop : heroThreshold
+      const pastHero = currentScrollY >= saboresStart * 0.85
+
+      if (pastHero) {
+        scrollYRef.current = heroThreshold
+      } else {
+        scrollYRef.current = currentScrollY
+      }
+
+      if (currentScrollY !== lastScrollY) {
+        lastScrollY = currentScrollY
         applyCanvasStyle()
       }
+
       rafId = requestAnimationFrame(rafLoop)
     }
     rafId = requestAnimationFrame(rafLoop)
-
-    window.addEventListener('scroll', handleScroll, { passive: true })
     window.addEventListener('resize', applyCanvasStyle)
 
     applyCanvasStyle()
 
     return () => {
-      window.removeEventListener('scroll', handleScroll)
       window.removeEventListener('resize', applyCanvasStyle)
       cancelAnimationFrame(rafId)
     }
   }, [modelReady])
-
-  const handleFirstCardReady = useCallback((el: HTMLElement | null) => {
-    setFirstCardEl(el)
-    flavorCardRef.current = el
-  }, [])
 
   const handleCanvasError = useCallback(() => {
     if (!retried.current) {
@@ -169,7 +162,6 @@ export function Home({ bgColor = "#F3E8FF" }: HomeProps) {
             <Scene
               scrollYRef={scrollYRef}
               heroThreshold={heroThreshold}
-              firstCardEl={firstCardEl}
               glbUrl={activeFlavor.glb}
               isFlipped={isFlipped}
             />
@@ -187,7 +179,6 @@ export function Home({ bgColor = "#F3E8FF" }: HomeProps) {
           />
         </section>
         <Sabores
-          onFirstCardReady={handleFirstCardReady}
           activeFlavorIndex={activeFlavorIndex}
           setActiveFlavorIndex={setActiveFlavorIndex}
           isFlipped={isFlipped}
