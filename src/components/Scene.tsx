@@ -5,7 +5,6 @@ import { CanModel } from "./CanModel"
 interface SceneProps {
   scrollYRef?: React.MutableRefObject<number>
   heroThreshold?: number
-  firstCardEl?: HTMLElement | null
   glbUrl?: string
   isFlipped?: boolean
 }
