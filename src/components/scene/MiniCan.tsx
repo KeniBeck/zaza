@@ -4,32 +4,13 @@ import { useGLTF, Environment } from "@react-three/drei"
 import * as THREE from "three"
 import { asset } from "../../constants"
 
-interface DragState {
-  isDragging: boolean
-  lastX: number
-  lastY: number
-  velocityX: number
-  velocityY: number
-}
-
-function easeOutCubic(t: number): number {
-  return 1 - Math.pow(1 - t, 3)
-}
-
-function CanMini({ glbUrl, scale = 0.15 }: { glbUrl: string; scale?: number }) {
+function CanMini({ glbUrl, scale = 0.85 }: { glbUrl: string; scale?: number }) {
   const groupRef = useRef<THREE.Group>(null)
-  const drag = useRef<DragState>({
-    isDragging: false,
-    lastX: 0,
-    lastY: 0,
-    velocityX: 0,
-    velocityY: 0,
-  })
   const startTime = useRef(0)
-  const animDone = useRef(false)
-  const TARGET_X = -1.25
-  const ENTER_FROM_X = TARGET_X + 8
-  const ENTER_DURATION = 0.9
+
+  const TARGET_X = -1.0         // posición X final — ajustar al gusto
+  const TARGET_Y = -0.25         // posición Y de reposo — ajustar si sube/baja
+  const ENTER_DURATION = 1.2    // segundos que dura la entrada
 
   const { scene } = useGLTF(asset(glbUrl))
   const cloned = useMemo(() => scene.clone(true), [scene])
@@ -58,103 +39,36 @@ function CanMini({ glbUrl, scale = 0.15 }: { glbUrl: string; scale?: number }) {
     return c.clone().negate()
   }, [cloned])
 
-  useEffect(() => {
-    const canvas = document.getElementById("mini-can-canvas")
-    if (!canvas) return
-
-    const onStart = (x: number, y: number) => {
-      drag.current.isDragging = true
-      drag.current.lastX = x
-      drag.current.lastY = y
-      drag.current.velocityX = 0
-      drag.current.velocityY = 0
-      document.body.style.overflow = 'hidden'
-    }
-
-    const onMove = (x: number, y: number) => {
-      if (!drag.current.isDragging) return
-      const dx = x - drag.current.lastX
-      const dy = y - drag.current.lastY
-      drag.current.velocityX = dx
-      drag.current.velocityY = dy
-      drag.current.lastX = x
-      drag.current.lastY = y
-    }
-
-    const onEnd = () => {
-      drag.current.isDragging = false
-      document.body.style.overflow = ''
-    }
-
-    const onMouseDown = (e: MouseEvent) => onStart(e.clientX, e.clientY)
-    const onMouseMove = (e: MouseEvent) => onMove(e.clientX, e.clientY)
-    const onMouseUp = () => onEnd()
-
-    const onTouchStart = (e: TouchEvent) => {
-      e.preventDefault()
-      onStart(e.touches[0].clientX, e.touches[0].clientY)
-    }
-    const onTouchMove = (e: TouchEvent) => {
-      e.preventDefault()
-      onMove(e.touches[0].clientX, e.touches[0].clientY)
-    }
-    const onTouchEnd = () => onEnd()
-
-    canvas.addEventListener("mousedown", onMouseDown)
-    window.addEventListener("mousemove", onMouseMove)
-    window.addEventListener("mouseup", onMouseUp)
-    canvas.addEventListener("touchstart", onTouchStart, { passive: false })
-    canvas.addEventListener("touchmove", onTouchMove, { passive: false })
-    canvas.addEventListener("touchend", onTouchEnd)
-
-    ;(canvas as HTMLElement).style.cursor = "grab"
-    canvas.addEventListener("mousedown", () => {
-      ;(canvas as HTMLElement).style.cursor = "grabbing"
-    })
-    canvas.addEventListener("mouseup", () => {
-      ;(canvas as HTMLElement).style.cursor = "grab"
-    })
-
-    return () => {
-      canvas.removeEventListener("mousedown", onMouseDown)
-      window.removeEventListener("mousemove", onMouseMove)
-      window.removeEventListener("mouseup", onMouseUp)
-      canvas.removeEventListener("touchstart", onTouchStart)
-      canvas.removeEventListener("touchmove", onTouchMove)
-      canvas.removeEventListener("touchend", onTouchEnd)
-    }
-  }, [])
-
   useFrame(({ clock }) => {
     if (!groupRef.current) return
 
+    // Registrar tiempo de inicio una sola vez
     if (startTime.current === 0) startTime.current = clock.elapsedTime
+    const t = clock.elapsedTime - startTime.current  // tiempo local desde que montó
 
-    if (!animDone.current) {
-      const elapsed = clock.elapsedTime - startTime.current
-      const t = Math.min(elapsed / ENTER_DURATION, 1)
-      const ease = easeOutCubic(t)
-      groupRef.current.position.x = ENTER_FROM_X + (TARGET_X - ENTER_FROM_X) * ease
-      if (t >= 1) {
-        groupRef.current.position.x = TARGET_X
-        animDone.current = true
-      }
-      return
-    }
+    // ── Curva de entrada (0 → 1 en ENTER_DURATION segundos) ──
+    const entryProgress = Math.min(t / ENTER_DURATION, 1)
+    // ease out expo — arranca rápido, frena muy suave al final
+    const entryEase = entryProgress === 1 ? 1 : 1 - Math.pow(2, -10 * entryProgress)
 
-    if (drag.current.isDragging) {
-      groupRef.current.rotation.y += drag.current.velocityX * 0.01
-      groupRef.current.rotation.x += drag.current.velocityY * 0.01
-    } else {
-      drag.current.velocityX *= 0.92
-      drag.current.velocityY *= 0.92
-      groupRef.current.rotation.y += drag.current.velocityX * 0.01
-      groupRef.current.rotation.x += drag.current.velocityY * 0.01
-    }
+    // ── Posición X — viene de la derecha, termina en TARGET_X ──
+    const fromX = TARGET_X + 8
+    groupRef.current.position.x = fromX + (TARGET_X - fromX) * entryEase
+
+    // ── Posición Y — el idle de flotación arranca desde 0 y crece
+    //    con entryEase como multiplicador — no hay salto ──
+    groupRef.current.position.y = TARGET_Y          // Y fija, no flota
+    groupRef.current.rotation.x = Math.sin(t * 0.5) * 0.45  // sin inclinación
+
+
+    // ── Rotación Y — gira desde el principio, siempre constante ──
+    groupRef.current.rotation.y = t * 0.4
   })
 
   return (
-    <group ref={groupRef} scale={scale} position={[ENTER_FROM_X, -0.2, 0]}>
+    // position inicial en X fuera de pantalla, Y en TARGET_Y
+    // useFrame lo mueve desde el primer frame
+    <group ref={groupRef} scale={scale} position={[TARGET_X + 8, TARGET_Y, 0]}>
       <primitive object={cloned} position={centerOffset} />
     </group>
   )
