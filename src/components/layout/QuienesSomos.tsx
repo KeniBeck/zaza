@@ -8,12 +8,14 @@ interface QuienesSomosProps {
   gradientStart?: string
   gradientMid?: string
   gradientEnd?: string
+  nosotrosBg?: string
 }
 
 export function QuienesSomos({
   gradientStart = "#6B318B",
   gradientMid = "#A855F7",
   gradientEnd = "#C084FC",
+  nosotrosBg = "linear-gradient(160deg, #2a0d3a 0%, #3d1560 100%)",
 }: QuienesSomosProps) {
   const [viewerOpen, setViewerOpen] = useState(false)
   const [activeStory, setActiveStory] = useState(0)
@@ -31,7 +33,7 @@ export function QuienesSomos({
     <section id="nosotros" className="relative min-h-screen w-full flex flex-col items-center justify-center px-5 py-24 overflow-hidden">
       <div
         className="absolute inset-0 pointer-events-none"
-        style={{ background: "linear-gradient(160deg, #1a0a2e 0%, #2d1155 50%, #1a0a2e 100%)" }}
+        style={{ background: nosotrosBg }}
       >
         <BackgroundBlobs
           gradientStart={gradientStart}
@@ -54,9 +56,10 @@ export function QuienesSomos({
           Somos<br />
           <span
             style={{
-              color: "transparent",
-              WebkitTextStroke: `2px ${gradientEnd}`,
+              textShadow: `0 0 8px ${gradientStart}, 0 0 20px ${gradientStart}, 0 0 40px ${gradientStart}`,
+              WebkitTextStroke: `1px ${gradientStart}`,
               fontFamily: "var(--font-zaza)",
+              fontSize: "62px",
             }}
           >
             parche.

@@ -7,6 +7,7 @@ import { Navbar } from "../components/layout/Navbar"
 import { About } from "../components/layout/About"
 import { Sabores } from "../components/layout/Sabores"
 import { QuienesSomos } from "../components/layout/QuienesSomos"
+import { Colaboradores } from "../components/layout/Colaboradores"
 import { ZazaLogo } from "../components/shared/ZazaLogo"
 import { FLAVORS } from "../data/flavors"
 import { asset } from "../constants"
@@ -198,6 +199,13 @@ export function Home({ bgColor = "#F3E8FF" }: HomeProps) {
           gradientStart={activeFlavor.color}
           gradientMid={activeFlavor.gradientMid}
           gradientEnd={activeFlavor.gradientEnd}
+          nosotrosBg={activeFlavor.nosotrosBg}
+        />
+        <Colaboradores
+          gradientStart={activeFlavor.color}
+          gradientMid={activeFlavor.gradientMid}
+          gradientEnd={activeFlavor.gradientEnd}
+          colabBg={activeFlavor.colabBg}
         />
       </div>
     </div>
