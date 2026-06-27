@@ -206,6 +206,7 @@ export function Home({ bgColor = "#F3E8FF" }: HomeProps) {
           gradientMid={activeFlavor.gradientMid}
           gradientEnd={activeFlavor.gradientEnd}
           colabBg={activeFlavor.colabBg}
+          glbUrl={activeFlavor.glb}
         />
       </div>
     </div>

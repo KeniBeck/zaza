@@ -1,13 +1,16 @@
+import { useEffect, useRef, useState } from "react"
 import { BackgroundBlobs } from "../shared/BackgroundBlobs"
 import { BubbleSvg } from "../shared/BubbleSvg"
 import { COLABORADORES, type Colaborador } from "../../data/colaboradores"
 import { asset } from "../../constants"
+import { MiniCan } from "../scene/MiniCan"
 
 interface ColaboradoresProps {
   gradientStart?: string
   gradientMid?: string
   gradientEnd?: string
   colabBg?: string
+  glbUrl?: string
 }
 
 function ColaboradorCard({ colaborador, gradientEnd }: {
@@ -77,9 +80,30 @@ export function Colaboradores({
   gradientMid = "#A855F7",
   gradientEnd = "#C084FC",
   colabBg = "linear-gradient(160deg, #1c0828 0%, #280d45 100%)",
+  glbUrl = "/textura-morada.glb",
 }: ColaboradoresProps) {
+  const sectionRef = useRef<HTMLElement>(null)
+  const [canvasMounted, setCanvasMounted] = useState(false)
+
+  useEffect(() => {
+    const el = sectionRef.current
+    if (!el) return
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setCanvasMounted(true)
+        } else {
+          setTimeout(() => setCanvasMounted(false), 300)
+        }
+      },
+      { threshold: 0.15 }
+    )
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
+
   return (
-    <section id="colaboradores" className="relative min-h-screen w-full flex flex-col items-center justify-center px-5 py-24 overflow-hidden">
+    <section ref={sectionRef} id="colaboradores" className="relative min-h-screen w-full flex flex-col items-center justify-center px-5 py-24 overflow-hidden">
       <div
         className="absolute inset-0 pointer-events-none"
         style={{ background: colabBg }}
@@ -101,19 +125,27 @@ export function Colaboradores({
           Colaboradores
         </p>
 
-        <h2 style={{ fontSize: "52px", fontWeight: 900, lineHeight: 1, color: "#fff", letterSpacing: "-1px" }}>
-          El<br />team<br />
-          <span
-            style={{
-              textShadow: `0 0 8px ${gradientStart}, 0 0 20px ${gradientStart}, 0 0 40px ${gradientStart}`,
-              WebkitTextStroke: `1px ${gradientStart}`,
-              fontFamily: "var(--font-zaza)",
-              fontSize: "62px",
-            }}
-          >
-            zaza.
-          </span>
-        </h2>
+        <div className="flex items-start w-full">
+          <div style={{ flexShrink: 0, width: "160px" }}>
+            <h2 style={{ fontSize: "52px", fontWeight: 900, lineHeight: 1, color: "#fff", letterSpacing: "-1px" }}>
+              El<br />team<br />
+              <span
+                style={{
+                  textShadow: `0 0 8px ${gradientStart}, 0 0 20px ${gradientStart}, 0 0 40px ${gradientStart}`,
+                  WebkitTextStroke: `1px ${gradientStart}`,
+                  fontFamily: "var(--font-zaza)",
+                  fontSize: "62px",
+                }}
+              >
+                zaza.
+              </span>
+            </h2>
+          </div>
+
+          <div style={{ flex: 1, height: "190px" }}>
+            {canvasMounted && <MiniCan glbUrl={glbUrl} scale={0.15} />}
+          </div>
+        </div>
 
         <p className="text-base font-bold text-white leading-snug pl-4"
           style={{ borderLeft: `3px solid ${gradientEnd}` }}>
