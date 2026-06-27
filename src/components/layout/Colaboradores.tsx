@@ -1,6 +1,7 @@
 import { BackgroundBlobs } from "../shared/BackgroundBlobs"
 import { BubbleSvg } from "../shared/BubbleSvg"
 import { COLABORADORES, type Colaborador } from "../../data/colaboradores"
+import { asset } from "../../constants"
 
 interface ColaboradoresProps {
   gradientStart?: string
@@ -29,7 +30,7 @@ function ColaboradorCard({ colaborador, gradientEnd }: {
           style={{ background: `linear-gradient(135deg, ${gradientEnd}44, #6B318B88)` }}
         >
           <img
-            src={colaborador.foto}
+            src={asset(colaborador.foto)}
             alt={colaborador.nombre}
             className="w-full h-full object-cover"
             loading="lazy"
@@ -58,7 +59,7 @@ function ColaboradorCard({ colaborador, gradientEnd }: {
           className="inline-flex items-center gap-1.5 mt-0.5"
         >
           <img
-            src="/decor/ig.png"
+            src={asset("/decor/ig.png")}
             alt="Instagram"
             className="w-3.5 h-3.5"
           />
