@@ -135,7 +135,7 @@ export function StoryViewer({ initialIndex, gradientStart, gradientMid, gradient
         style={{ top: 0, paddingTop: "max(env(safe-area-inset-top, 0px), 20px)" }}
       >
         <div
-          className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold text-white flex-shrink-0"
+          className="w-8 h-8 rounded-full flex items-center justify-center text-2xl font-zaza text-white flex-shrink-0"
           style={{ background: `${gradientEnd}60`, border: `1px solid ${gradientEnd}80` }}
         >
           Z

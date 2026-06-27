@@ -11,6 +11,8 @@ export interface Flavor {
   gradientEnd: string
   bgLight: string
   sectionBg: string
+  nosotrosBg: string
+  colabBg: string
 }
 
 export const FLAVORS: Flavor[] = [
@@ -27,6 +29,8 @@ export const FLAVORS: Flavor[] = [
     gradientEnd: "#A03B90",
     bgLight: "#F3E8FF",
     sectionBg: "linear-gradient(135deg, #6B318B 0%, #7B3D8F 40%, #A03B90 100%)",
+    nosotrosBg: "linear-gradient(160deg, #2a0d3a 0%, #3d1560 100%)",
+    colabBg: "linear-gradient(160deg, #1c0828 0%, #280d45 100%)",
   },
   {
     id: "azul",
@@ -36,11 +40,13 @@ export const FLAVORS: Flavor[] = [
     ingredients: ["Menta", "Arándanos", "Vodka"],
     price: "$ 17.900",
     glb: "/textura-azul.glb",
-    color: "#1E88E5",
-    gradientMid: "#42A5F5",
-    gradientEnd: "#64B5F6",
+    color: "#0d4a8a",
+    gradientMid: "#1565C0",
+    gradientEnd: "#1976D2",
     bgLight: "#E3F2FD",
-    sectionBg: "linear-gradient(135deg, #0D47A1 0%, #1565C0 40%, #42A5F5 100%)",
+    sectionBg: "linear-gradient(135deg, #0d3d6e 0%, #155ea8 50%, #1a78c8 100%)",
+    nosotrosBg: "linear-gradient(160deg, #051828 0%, #0a2d50 100%)",
+    colabBg: "linear-gradient(160deg, #030e1a 0%, #061e36 100%)",
   },
   {
     id: "roja",
@@ -51,12 +57,13 @@ export const FLAVORS: Flavor[] = [
     ingredients: ["Kola", "Frutos rojos", "Whisky"],
     price: "$ 17.900",
     glb: "/textura-berry.glb",
-    color: "#E31245",
-    gradientMid: "#F23B5F",
-    gradientEnd: "#B12222",
+    color: "#8a0a28",
+    gradientMid: "#b01530",
+    gradientEnd: "#6e1515",
     bgLight: "#FFF1F3",
-    sectionBg:
-      "linear-gradient(135deg,#E31245 0%,#E9445C 40%,#B12222 100%)",
+    sectionBg: "linear-gradient(135deg, #8a0a28 0%, #b5103a 50%, #7a1515 100%)",
+    nosotrosBg: "linear-gradient(160deg, #2d0510 0%, #4a0c1e 100%)",
+    colabBg: "linear-gradient(160deg, #1a0309 0%, #2e0812 100%)",
   },
   {
     id: "lulay",
@@ -67,12 +74,13 @@ export const FLAVORS: Flavor[] = [
     ingredients: ["Limón", "Lulo", "Ron"],
     price: "$ 17.900",
     glb: "/textura-lulay.glb",
-    color: "#A7CC39",
-    gradientMid: "#C9DB55",
-    gradientEnd: "#58BF4D",
+    color: "#4a6310",
+    gradientMid: "#6b7e1a",
+    gradientEnd: "#206b18",
     bgLight: "#F7FCEB",
-    sectionBg:
-      "linear-gradient(135deg,#A7CC39 0%,#D2DE58 40%,#58BF4D 100%)",
+    sectionBg: "linear-gradient(135deg, #3d5214 0%, #5a7a1e 50%, #1e6b18 100%)",
+    nosotrosBg: "linear-gradient(160deg, #141f05 0%, #233510 100%)",
+    colabBg: "linear-gradient(160deg, #0a1302 0%, #152008 100%)",
   },
   {
     id: "tropico",
@@ -87,7 +95,8 @@ export const FLAVORS: Flavor[] = [
     gradientMid: "#5FC07E",
     gradientEnd: "#19A9B6",
     bgLight: "#EAFBF7",
-    sectionBg:
-      "linear-gradient(135deg,#31B49A 0%,#63C57D 40%,#19A9B6 100%)",
+    sectionBg: "linear-gradient(135deg,#31B49A 0%,#63C57D 40%,#19A9B6 100%)",
+    nosotrosBg: "linear-gradient(160deg, #072e28 0%, #0d4a3a 100%)",
+    colabBg: "linear-gradient(160deg, #041c18 0%, #082e24 100%)",
   },
 ]
