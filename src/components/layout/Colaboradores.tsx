@@ -142,7 +142,7 @@ export function Colaboradores({
             </h2>
           </div>
 
-          <div style={{ flex: 1, height: "190px" }}>
+          <div style={{ flex: 1, height: "194px" }}>
             {canvasMounted && <MiniCan glbUrl={glbUrl} scale={0.15} />}
           </div>
         </div>
