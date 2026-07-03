@@ -31,7 +31,6 @@ export function Contacto({
         </p>
 
         <h2 className="text-center" style={{ fontSize: "38px", fontWeight: 900, lineHeight: 1, color: "#1a0a2e", letterSpacing: "-1px" }}>
-          Súmate<br />al{" "}
           <span
             style={{
               textShadow: `0 0 4px ${gradientStart}80, 0 0 12px ${gradientStart}40`,
@@ -40,7 +39,7 @@ export function Contacto({
               fontSize: "44px",
             }}
           >
-            parche.
+           Súmate al  parche.
           </span>
         </h2>
 
