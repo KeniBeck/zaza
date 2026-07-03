@@ -8,6 +8,7 @@ import { About } from "../components/layout/About"
 import { Sabores } from "../components/layout/Sabores"
 import { QuienesSomos } from "../components/layout/QuienesSomos"
 import { Colaboradores } from "../components/layout/Colaboradores"
+import { Contacto } from "../components/layout/Contacto"
 import { ZazaLogo } from "../components/shared/ZazaLogo"
 import { FLAVORS } from "../data/flavors"
 import { asset } from "../constants"
@@ -207,6 +208,11 @@ export function Home({ bgColor = "#F3E8FF" }: HomeProps) {
           gradientEnd={activeFlavor.gradientEnd}
           colabBg={activeFlavor.colabBg}
           glbUrl={activeFlavor.glb}
+        />
+        <Contacto
+          gradientStart={activeFlavor.color}
+          gradientMid={activeFlavor.gradientMid}
+          gradientEnd={activeFlavor.gradientEnd}
         />
       </div>
     </div>
