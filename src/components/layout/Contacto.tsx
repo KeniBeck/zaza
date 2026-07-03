@@ -34,8 +34,8 @@ export function Contacto({
           Súmate<br />al{" "}
           <span
             style={{
-              textShadow: `0 0 6px ${gradientStart}, 0 0 16px ${gradientStart}, 0 0 32px ${gradientStart}`,
-              WebkitTextStroke: `1px ${gradientStart}`,
+              textShadow: `0 0 4px ${gradientStart}80, 0 0 12px ${gradientStart}40`,
+              WebkitTextStroke: `0.5px ${gradientStart}60`,
               fontFamily: "var(--font-zaza)",
               fontSize: "44px",
             }}
