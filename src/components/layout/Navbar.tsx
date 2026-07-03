@@ -44,7 +44,18 @@ export function Navbar({ borderColor = "#722f96", color = "#6B318B", gradientEnd
     )
 
     elements.forEach(el => observer.observe(el))
-    return () => observer.disconnect()
+
+    const handleScroll = () => {
+      if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 100) {
+        setActiveSection("contacto")
+      }
+    }
+    window.addEventListener("scroll", handleScroll, { passive: true })
+
+    return () => {
+      observer.disconnect()
+      window.removeEventListener("scroll", handleScroll)
+    }
   }, [])
 
   return (
