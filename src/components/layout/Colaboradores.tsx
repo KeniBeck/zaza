@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react"
 import { BackgroundBlobs } from "../shared/BackgroundBlobs"
 import { BubbleSvg } from "../shared/BubbleSvg"
+import { WaveDivider } from "../shared/WaveDivider"
 import { COLABORADORES, type Colaborador } from "../../data/colaboradores"
 import { asset } from "../../constants"
 import { MiniCan } from "../scene/MiniCan"
@@ -11,6 +12,8 @@ interface ColaboradoresProps {
   gradientEnd?: string
   colabBg?: string
   glbUrl?: string
+  /** Color claro de la siguiente sección (Contacto), para la transición ondulada */
+  bgLight?: string
 }
 
 function ColaboradorCard({ colaborador, gradientEnd }: {
@@ -81,6 +84,7 @@ export function Colaboradores({
   gradientEnd = "#C084FC",
   colabBg = "linear-gradient(160deg, #1c0828 0%, #280d45 100%)",
   glbUrl = "/textura-morada.glb",
+  bgLight = "#F3E8FF",
 }: ColaboradoresProps) {
   const sectionRef = useRef<HTMLElement>(null)
   const [canvasMounted, setCanvasMounted] = useState(false)
@@ -118,6 +122,7 @@ export function Colaboradores({
           gradientMid={gradientMid}
           gradientEnd={gradientEnd}
         />
+        <WaveDivider toColor={bgLight} accentColor={gradientEnd} height={240} />
       </div>
 
       <div className="relative z-10 flex flex-col items-start gap-6 w-full max-w-sm">

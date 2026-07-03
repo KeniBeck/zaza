@@ -43,7 +43,7 @@ function LoadingSplash() {
   )
 }
 
-export function Home({ bgColor = "#F3E8FF" }: HomeProps) {
+export function Home({ bgColor }: HomeProps) {
   const scrollYRef = useRef(0)
   const pinnedTopRef = useRef<number | null>(null)
   const [modelReady, setModelReady] = useState(false)
@@ -147,7 +147,7 @@ export function Home({ bgColor = "#F3E8FF" }: HomeProps) {
   }
 
   return (
-    <div className="relative w-full" style={{ backgroundColor: bgColor }}>
+    <div className="relative w-full" style={{ backgroundColor: bgColor ?? activeFlavor.bgLight }}>
       <Navbar color={activeFlavor.color} gradientEnd={activeFlavor.gradientEnd} borderColor={activeFlavor.color} />
 
       <ErrorBoundary key={canvasKey} onError={handleCanvasError}>
@@ -208,11 +208,13 @@ export function Home({ bgColor = "#F3E8FF" }: HomeProps) {
           gradientEnd={activeFlavor.gradientEnd}
           colabBg={activeFlavor.colabBg}
           glbUrl={activeFlavor.glb}
+          bgLight={activeFlavor.bgLight}
         />
         <Contacto
           gradientStart={activeFlavor.color}
           gradientMid={activeFlavor.gradientMid}
           gradientEnd={activeFlavor.gradientEnd}
+          bgLight={activeFlavor.bgLight}
         />
       </div>
     </div>
