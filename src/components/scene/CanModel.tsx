@@ -24,9 +24,9 @@ const HERO_Y_MOBILE =
         : screenW < 430
           ? 0.30    // iPhone 14 Pro
           : 0.26    // Pro Max y más grandes
-const SCROLL_X_RANGE_DESKTOP = 0.5
+const SCROLL_X_RANGE_DESKTOP = 0.1
 const SCROLL_X_RANGE_MOBILE = -0.01
-const SCROLL_Y_RANGE_DESKTOP = 0.2
+const SCROLL_Y_RANGE_DESKTOP = 0.4
 const SCROLL_Y_RANGE_MOBILE = screenW <= 360 && screenH >= 700 ? 0.3 :
   screenW > 410 ? 0.3 : 0.2
 const DURATION = 0.8
@@ -50,6 +50,7 @@ export function CanModel({ scrollYRef, heroThreshold = 0, glbUrl, isFlipped }: C
   const startTime = useRef(0)
   const animDone = useRef(false)
   const flipProgress = useRef(0)
+  const smoothScrollY = useRef(0)
   const materialsRef = useRef<THREE.MeshStandardMaterial[]>([])
   const config = useMemo(() => {
     const isMobile = window.innerWidth < MOBILE_BREAKPOINT
@@ -144,7 +145,17 @@ export function CanModel({ scrollYRef, heroThreshold = 0, glbUrl, isFlipped }: C
     }
 
     const rawScrollY = scrollYRef?.current ?? 0
-    const scrollY = Math.min(rawScrollY, heroThreshold)
+    const clampedRawScrollY = Math.min(rawScrollY, heroThreshold)
+
+    if (config.isMobile) {
+      // Mobile: el scroll táctil ya es continuo cuadro a cuadro, se deja igual.
+      smoothScrollY.current = clampedRawScrollY
+    } else {
+      // Desktop: la rueda del mouse llega en saltos discretos (cada "tick" mueve varios píxeles de golpe).
+      smoothScrollY.current += (clampedRawScrollY - smoothScrollY.current) * 0.12
+    }
+
+    const scrollY = smoothScrollY.current
     const scrollProgress = Math.min(scrollY / Math.max(heroThreshold, 1), 1)
 
     const rawEnvelope = Math.sin(Math.min(scrollProgress * Math.PI, Math.PI))

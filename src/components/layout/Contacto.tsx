@@ -35,8 +35,6 @@ export function Contacto({
         <h2 className="text-center" style={{ fontSize: "38px", fontWeight: 900, lineHeight: 1, color: "#1a0a2e", letterSpacing: "-1px" }}>
           <span
             style={{
-              textShadow: `0 0 4px ${gradientStart}80, 0 0 12px ${gradientStart}40`,
-              WebkitTextStroke: `0.5px ${gradientStart}60`,
               fontFamily: "var(--font-zaza)",
               fontSize: "44px",
             }}
