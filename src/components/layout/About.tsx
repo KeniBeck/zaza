@@ -52,7 +52,7 @@ export function About({
                 />
             </div>
 
-            <p className="mt-16 text-base md:text-xl text-[#464e59] text-center px-6 max-w-md leading-relaxed" style={{ marginTop: mobileScale("3.5rem", "3.5rem", "5rem", "8rem", undefined) }}>
+            <p className="mt-16 text-base text-[#464e59] md:text-xl md:text-black  text-center px-6 max-w-md leading-relaxed" style={{ marginTop: mobileScale("3.5rem", "3.5rem", "5rem", "8rem", undefined) }}>
                 el sabor de los momentos<br />que no se explican,{" "}
                 <span className="font-zaza text-2xl sm:text-3xl text-transparent bg-clip-text bg-[length:200%_auto] animate-text-shimmer" style={{ backgroundImage: `linear-gradient(to right, ${gradientStart}, ${gradientEnd}, ${gradientStart})`, filter: `drop-shadow(0 0 8px ${gradientMid}80)` }}>se viven</span>.
             </p>

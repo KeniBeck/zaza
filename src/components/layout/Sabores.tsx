@@ -1,7 +1,8 @@
-import { useRef, useState, useCallback, useEffect } from "react"
-import { FlavorCard } from "../shared/FlavorCard"
+import { useRef, useState, useCallback } from "react"
 import { InfoModal } from "./mobile/InfoModal"
 import { MobileFlavorCard } from "./mobile/MobileFlavorCard"
+import { FeaturedFlavor } from "./desktop/FeaturedFlavor"
+import { useCrossfade } from "../../hooks/useCrossfade"
 import { FLAVORS } from "../../data/flavors"
 
 interface SaboresProps {
@@ -26,18 +27,7 @@ export function Sabores({ activeFlavorIndex, setActiveFlavorIndex, isFlipped, on
   const blobEndRgb = hexToRgb(activeFlavor.gradientEnd)
   const isMobile = window.innerWidth < 768
 
-  const [bgLayers, setBgLayers] = useState([activeFlavor.sectionBg, activeFlavor.sectionBg])
-  const [activeBgLayer, setActiveBgLayer] = useState(0)
-
-  useEffect(() => {
-    const nextLayer = activeBgLayer === 0 ? 1 : 0
-    setBgLayers(prev => {
-      const next = [...prev]
-      next[nextLayer] = activeFlavor.sectionBg
-      return next
-    })
-    setActiveBgLayer(nextLayer)
-  }, [activeFlavorIndex])
+  const [bgLayers, activeBgLayer] = useCrossfade(activeFlavor.sectionBg)
 
   const handleNext = useCallback(() => {
     setShowInfo(false)
@@ -103,16 +93,12 @@ export function Sabores({ activeFlavorIndex, setActiveFlavorIndex, isFlipped, on
           onFlip={onFlip}
         />
 
-        {/* Desktop: current card grid */}
-        <div className="hidden md:flex flex-wrap justify-center gap-6">
-          {FLAVORS.map((flavor, i) => (
-            <FlavorCard
-              key={flavor.id}
-              flavor={flavor}
-              isFirst={i === 0}
-            />
-          ))}
-        </div>
+        {/* Desktop: featured card with selector */}
+        <FeaturedFlavor
+          flavors={FLAVORS}
+          activeIndex={activeFlavorIndex}
+          onSelect={(i) => setActiveFlavorIndex(i)}
+        />
       </div>
 
       {/* Info modal */}

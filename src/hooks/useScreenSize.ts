@@ -18,3 +18,7 @@ export function useScreenSize() {
 
   return { isMini, isStandard, isPro, isProMax, isMobile, isDesktop, mobileScale, w }
 }
+
+export function desktopClamp(min: string, mid: string, max: string): string {
+  return `clamp(${min}, ${mid}, ${max})`
+}

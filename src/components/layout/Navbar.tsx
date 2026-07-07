@@ -22,45 +22,37 @@ export function Navbar({ borderColor = "#722f96", color = "#6B318B", gradientEnd
   const [activeSection, setActiveSection] = useState("inicio")
 
   useEffect(() => {
-    const elements = NAV_LINKS
-      .map(l => document.getElementById(l.href.slice(1)))
-      .filter((el): el is HTMLElement => el !== null)
-
-    if (elements.length === 0) return
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        let bestId = ""
-        let bestRatio = 0
-        for (const entry of entries) {
-          if (entry.intersectionRatio > bestRatio) {
-            bestRatio = entry.intersectionRatio
-            bestId = entry.target.id
-          }
-        }
-        if (bestId) setActiveSection(bestId)
-      },
-      { threshold: [0.2, 0.4, 0.6, 0.8] }
-    )
-
-    elements.forEach(el => observer.observe(el))
-
     const handleScroll = () => {
-      if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 100) {
-        setActiveSection("contacto")
+      const scrollY = window.scrollY + 120
+      let current = "inicio"
+
+      for (const link of NAV_LINKS) {
+        const el = document.getElementById(link.href.slice(1))
+        if (el && el.offsetTop <= scrollY) {
+          current = el.id
+        }
       }
+
+      if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 50) {
+        current = "contacto"
+      }
+
+      setActiveSection(current)
     }
+
+    handleScroll()
     window.addEventListener("scroll", handleScroll, { passive: true })
+    window.addEventListener("resize", handleScroll, { passive: true })
 
     return () => {
-      observer.disconnect()
       window.removeEventListener("scroll", handleScroll)
+      window.removeEventListener("resize", handleScroll)
     }
   }, [])
 
   return (
     <nav className="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[90%] max-w-5xl will-change-transform">
-      <div className="relative flex items-center justify-between px-5 py-3 bg-white/70 backdrop-blur-sm rounded-2xl shadow-sm border border-white/20 overflow-hidden">
+      <div className="relative flex items-center justify-between px-5 py-3 bg-white/60 backdrop-blur-sm rounded-2xl shadow-sm border border-white/20 overflow-hidden">
         <ZazaLogo size={36} color={color} gradientEnd={gradientEnd} className="select-none" />
 
         <ul className="hidden md:flex items-center gap-1">
