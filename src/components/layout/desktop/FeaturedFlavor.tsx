@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react"
 import type { Flavor } from "../../../data/flavors"
 import { desktopClamp } from "../../../hooks/useScreenSize"
 import { useCrossfade } from "../../../hooks/useCrossfade"
