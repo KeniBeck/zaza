@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from "react"
 import { asset } from "../../constants"
 import { StoryProgress } from "./StoryProgress"
+import { FiChevronLeft, FiChevronRight } from "react-icons/fi"
 
 const STORIES = Array.from({ length: 6 }, (_, i) => ({
   src: asset(`/image/nosotros/galeria-${i + 1}.webp`),
@@ -19,49 +20,52 @@ interface StoryViewerProps {
 export function StoryViewer({ initialIndex, gradientStart, gradientMid, gradientEnd, onClose }: StoryViewerProps) {
   const [current, setCurrent] = useState(initialIndex)
   const [errored, setErrored] = useState(false)
-  const [transitioning, setTransitioning] = useState(false)
-  const [nextIndex, setNextIndex] = useState<number | null>(null)
-  const [entering, setEntering] = useState(true)
+  const [slideFrom, setSlideFrom] = useState<'left' | 'right' | null>(null)
   const touchStartRef = useRef<{ x: number; y: number } | null>(null)
+  const imgRef = useRef<HTMLImageElement>(null)
+  const goNextRef = useRef<() => void>(() => {})
+  const goPrevRef = useRef<() => void>(() => {})
+  const onCloseRef = useRef(onClose)
+  onCloseRef.current = onClose
 
-  useEffect(() => { setCurrent(initialIndex); setErrored(false); setEntering(true) }, [initialIndex])
-
-  useEffect(() => {
-    const t = setTimeout(() => setEntering(false), 50)
-    return () => clearTimeout(t)
-  }, [entering])
-
-  useEffect(() => {
-    if (!transitioning || nextIndex === null) return
-    const t = setTimeout(() => {
-      setCurrent(nextIndex)
-      setErrored(false)
-      setEntering(true)
-      setTransitioning(false)
-      setNextIndex(null)
-    }, 300)
-    return () => clearTimeout(t)
-  }, [transitioning, nextIndex])
+  useEffect(() => { setCurrent(initialIndex); setErrored(false); setSlideFrom(null) }, [initialIndex])
 
   useEffect(() => {
-    const handler = (e: KeyboardEvent) => {
-      if (e.key === 'ArrowLeft') goPrev()
-      else if (e.key === 'ArrowRight') goNext()
-      else if (e.key === 'Escape') onClose()
-    }
-    window.addEventListener('keydown', handler)
-    return () => window.removeEventListener('keydown', handler)
-  })
+    if (!slideFrom || !imgRef.current) return
+    const img = imgRef.current
+    img.style.transition = 'none'
+    img.style.transform = `translateX(${slideFrom === 'right' ? '100%' : '-100%'})`
+    img.getBoundingClientRect()
+    const raf = requestAnimationFrame(() => {
+      img.style.transition = 'transform 120ms ease-out'
+      img.style.transform = 'translateX(0)'
+    })
+    const t = setTimeout(() => setSlideFrom(null), 150)
+    return () => { cancelAnimationFrame(raf); clearTimeout(t) }
+  }, [current])
 
   const goTo = useCallback((idx: number) => {
     if (idx < 0 || idx >= STORIES.length) return
-    setNextIndex(idx)
-    setTransitioning(true)
+    const fromRight = idx > current
+    setCurrent(idx)
+    setSlideFrom(fromRight ? 'right' : 'left')
     setErrored(false)
-  }, [])
+  }, [current])
 
   const goNext = useCallback(() => goTo(current + 1), [current, goTo])
   const goPrev = useCallback(() => goTo(current - 1), [current, goTo])
+  goNextRef.current = goNext
+  goPrevRef.current = goPrev
+
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowLeft') goPrevRef.current()
+      else if (e.key === 'ArrowRight') goNextRef.current()
+      else if (e.key === 'Escape') onCloseRef.current()
+    }
+    window.addEventListener('keydown', handler)
+    return () => window.removeEventListener('keydown', handler)
+  }, [])
 
   const handlePointerDown = useCallback((e: React.PointerEvent) => {
     touchStartRef.current = { x: e.clientX, y: e.clientY }
@@ -85,7 +89,6 @@ export function StoryViewer({ initialIndex, gradientStart, gradientMid, gradient
   }, [goNext, goPrev])
 
   const story = STORIES[current]
-  const nextStory = nextIndex !== null ? STORIES[nextIndex] : null
 
   const bgGradient = `linear-gradient(160deg, ${gradientStart}55 0%, ${gradientMid}33 50%, ${gradientEnd}22 100%)`
 
@@ -93,33 +96,22 @@ export function StoryViewer({ initialIndex, gradientStart, gradientMid, gradient
     <div className="relative w-full h-full select-none overflow-hidden" style={{ background: "#0a0a0a" }}>
       <div className="absolute inset-0" style={{ background: bgGradient }} />
 
-      {nextStory && (
-        <img
-          src={nextStory.src}
-          alt=""
-          aria-hidden
-          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${
-            transitioning ? "opacity-100" : "opacity-0"
-          }`}
-          style={{ willChange: "opacity" }}
-        />
-      )}
-
-      {errored ? (
-        <div className="absolute inset-0 flex items-center justify-center">
-          <span className="text-4xl" style={{ opacity: 0.15 }}>📷</span>
+      <div className="absolute inset-0 flex items-center justify-center md:px-[12vw] md:py-[4vh]">
+        <div className="relative w-full h-full">
+          {errored ? (
+            <span className="absolute inset-0 flex items-center justify-center text-4xl" style={{ opacity: 0.15 }}>📷</span>
+          ) : (
+            <img
+              ref={imgRef}
+              src={story.src}
+              alt={`Historia ${current + 1}`}
+              onError={() => setErrored(true)}
+              className="absolute inset-0 w-full h-full object-cover md:object-contain md:rounded-2xl"
+              style={{ willChange: "transform" }}
+            />
+          )}
         </div>
-      ) : (
-        <img
-          src={story.src}
-          alt={`Historia ${current + 1}`}
-          onError={() => setErrored(true)}
-          className={`absolute inset-0 w-full h-full object-cover transition-all duration-700 ease-out ${
-            entering ? "opacity-0 scale-[1.02]" : "opacity-100 scale-[1.02]"
-          }`}
-          style={{ willChange: "transform, opacity" }}
-        />
-      )}
+      </div>
 
       <div
         className="absolute inset-0 pointer-events-none"
@@ -127,6 +119,22 @@ export function StoryViewer({ initialIndex, gradientStart, gradientMid, gradient
           background: "linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 40%, transparent 60%, rgba(0,0,0,0.2) 100%)",
         }}
       />
+
+      <button
+        aria-label="Anterior"
+        className="hidden md:flex absolute left-3 top-1/2 -translate-y-1/2 z-20 items-center justify-center rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-white/25 transition-all cursor-pointer w-10 h-10 text-lg"
+        onClick={(e) => { e.stopPropagation(); goPrev() }}
+      >
+        <FiChevronLeft />
+      </button>
+
+      <button
+        aria-label="Siguiente"
+        className="hidden md:flex absolute right-3 top-1/2 -translate-y-1/2 z-20 items-center justify-center rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-white/25 transition-all cursor-pointer w-10 h-10 text-lg"
+        onClick={(e) => { e.stopPropagation(); goNext() }}
+      >
+        <FiChevronRight />
+      </button>
 
       <StoryProgress total={STORIES.length} current={current} progress={1} color={gradientEnd} />
 
