@@ -5,6 +5,7 @@ import { WaveDivider } from "../shared/WaveDivider"
 import { COLABORADORES, type Colaborador } from "../../data/colaboradores"
 import { asset } from "../../constants"
 import { MiniCan } from "../scene/MiniCan"
+import { ColaboradoresDesktop } from "./desktop/ColaboradoresDesktop"
 
 interface ColaboradoresProps {
   gradientStart?: string
@@ -107,9 +108,10 @@ export function Colaboradores({
   }, [])
 
   return (
-    <section ref={sectionRef} id="colaboradores" className="relative min-h-screen w-full flex flex-col items-center justify-center px-5 py-24 overflow-hidden">
+    <section ref={sectionRef} id="colaboradores" className="relative min-h-screen w-full flex flex-col items-center px-5 py-18">
+      {/* fondo gradiente de la sección + blobs/burbujas (recortados si se salen) */}
       <div
-        className="absolute inset-0 pointer-events-none"
+        className="absolute inset-0 pointer-events-none overflow-hidden"
         style={{ background: colabBg }}
       >
         <BackgroundBlobs
@@ -122,53 +124,67 @@ export function Colaboradores({
           gradientMid={gradientMid}
           gradientEnd={gradientEnd}
         />
-        <WaveDivider toColor={bgLight} accentColor={gradientEnd} height={240} />
       </div>
 
-      <div className="relative z-10 flex flex-col items-start gap-6 w-full max-w-sm">
-        <p className="font-sans text-xs tracking-[4px] uppercase font-semibold" style={{ color: gradientEnd }}>
-          Colaboradores
-        </p>
+      {/* WaveDivider fuera del contenedor recortado para que su sangrado llegue a Contacto */}
+      <WaveDivider toColor={bgLight} accentColor={gradientEnd} darkColor={gradientStart} height={240} />
 
-        <div className="flex items-start w-full">
-          <div style={{ flexShrink: 0, width: "160px" }}>
-            <h2 style={{ fontSize: "52px", fontWeight: 900, lineHeight: 1, color: "#fff", letterSpacing: "-1px" }}>
-              El<br />team<br />
-              <span
-                style={{
-                  textShadow: `0 0 8px ${gradientStart}, 0 0 20px ${gradientStart}, 0 0 40px ${gradientStart}`,
-                  WebkitTextStroke: `1px ${gradientStart}`,
-                  fontFamily: "var(--font-zaza)",
-                  fontSize: "62px",
-                }}
-              >
-                zaza.
-              </span>
-            </h2>
+      <div className="relative z-10 w-full flex flex-col items-center">
+        <div className="md:hidden flex flex-col items-start gap-6 w-full max-w-sm">
+          <p className="font-sans text-xs tracking-[4px] uppercase font-semibold" style={{ color: gradientEnd }}>
+            Colaboradores
+          </p>
+
+          <div className="flex items-start w-full">
+            <div style={{ flexShrink: 0, width: "160px" }}>
+              <h2 style={{ fontSize: "52px", fontWeight: 900, lineHeight: 1, color: "#fff", letterSpacing: "-1px" }}>
+                El<br />team<br />
+                <span
+                  style={{
+                    textShadow: `0 0 8px ${gradientStart}, 0 0 20px ${gradientStart}, 0 0 40px ${gradientStart}`,
+                    WebkitTextStroke: `1px ${gradientStart}`,
+                    fontFamily: "var(--font-zaza)",
+                    fontSize: "62px",
+                  }}
+                >
+                  zaza.
+                </span>
+              </h2>
+            </div>
+
+            <div style={{ flex: 1, height: "194px" }}>
+              {canvasMounted && <MiniCan glbUrl={glbUrl} scale={0.15} />}
+            </div>
           </div>
 
-          <div style={{ flex: 1, height: "194px" }}>
-            {canvasMounted && <MiniCan glbUrl={glbUrl} scale={0.15} />}
+          <p className="text-base font-bold text-white leading-snug pl-4"
+            style={{ borderLeft: `3px solid ${gradientEnd}` }}>
+            Los que hacen que esto sea real, todos los días.
+          </p>
+
+          <div className="flex items-center gap-3 w-full">
+            <span className="text-[11px] tracking-[3px] uppercase font-semibold"
+              style={{ color: `${gradientEnd}80` }}>
+              El parche
+            </span>
+            <div className="flex-1 h-px" style={{ background: `${gradientEnd}20` }} />
+          </div>
+
+          <div className="flex flex-col gap-3 w-full">
+            {COLABORADORES.map((c) => (
+              <ColaboradorCard key={c.nombre} colaborador={c} gradientEnd={gradientEnd} />
+            ))}
           </div>
         </div>
 
-        <p className="text-base font-bold text-white leading-snug pl-4"
-          style={{ borderLeft: `3px solid ${gradientEnd}` }}>
-          Los que hacen que esto sea real, todos los días.
-        </p>
-
-        <div className="flex items-center gap-3 w-full">
-          <span className="text-[11px] tracking-[3px] uppercase font-semibold"
-            style={{ color: `${gradientEnd}80` }}>
-            El parche
-          </span>
-          <div className="flex-1 h-px" style={{ background: `${gradientEnd}20` }} />
-        </div>
-
-        <div className="flex flex-col gap-3 w-full">
-          {COLABORADORES.map((c) => (
-            <ColaboradorCard key={c.nombre} colaborador={c} gradientEnd={gradientEnd} />
-          ))}
+        <div className="hidden md:block w-full">
+          <ColaboradoresDesktop
+            gradientStart={gradientStart}
+            gradientMid={gradientMid}
+            gradientEnd={gradientEnd}
+            glbUrl={glbUrl}
+            canvasMounted={canvasMounted}
+          />
         </div>
       </div>
     </section>

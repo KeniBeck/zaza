@@ -4,13 +4,19 @@ import { useGLTF, Environment } from "@react-three/drei"
 import * as THREE from "three"
 import { asset } from "../../constants"
 
+function easeOutCubic(t: number): number {
+  return 1 - Math.pow(1 - t, 3)
+}
+
 function CanMini({ glbUrl, scale = 0.85 }: { glbUrl: string; scale?: number }) {
   const groupRef = useRef<THREE.Group>(null)
   const startTime = useRef(0)
 
-  const TARGET_X = -1.0         // posición X final — ajustar al gusto
-  const TARGET_Y = -0.25         // posición Y de reposo — ajustar si sube/baja
+  const TARGET_X = -0.7         // posición X final — ajustar al gusto
+  const TARGET_Y = -0.45         // posición Y de reposo — ajustar si sube/baja
   const ENTER_DURATION = 1.2    // segundos que dura la entrada
+  const ENTRY_START_ANGLE = Math.PI * 0.2  // rotación Y inicial de entrada (sutil)
+  const IDLE_SPEED = 0.07       // velocidad de giro continuo post-entrada
 
   const { scene } = useGLTF(asset(glbUrl))
   const cloned = useMemo(() => scene.clone(true), [scene])
@@ -48,21 +54,30 @@ function CanMini({ glbUrl, scale = 0.85 }: { glbUrl: string; scale?: number }) {
 
     // ── Curva de entrada (0 → 1 en ENTER_DURATION segundos) ──
     const entryProgress = Math.min(t / ENTER_DURATION, 1)
-    // ease out expo — arranca rápido, frena muy suave al final
-    const entryEase = entryProgress === 1 ? 1 : 1 - Math.pow(2, -10 * entryProgress)
+    const entryEase = easeOutCubic(entryProgress)
 
     // ── Posición X — viene de la derecha, termina en TARGET_X ──
     const fromX = TARGET_X + 8
     groupRef.current.position.x = fromX + (TARGET_X - fromX) * entryEase
 
-    // ── Posición Y — el idle de flotación arranca desde 0 y crece
-    //    con entryEase como multiplicador — no hay salto ──
-    groupRef.current.position.y = TARGET_Y          // Y fija, no flota
-    groupRef.current.rotation.x = Math.sin(t * 0.5) * 0.45  // sin inclinación
+    // ── Posición Y fija ──
+    groupRef.current.position.y = TARGET_Y
 
+    // ── Rotación Y de entrada: arranca torcida con ENTRY_START_ANGLE
+    //    y se asienta suavemente a 0 durante la entrada ──
+    const entryRotY = ENTRY_START_ANGLE * (1 - entryEase)
 
-    // ── Rotación Y — gira desde el principio, siempre constante ──
-    groupRef.current.rotation.y = t * 0.4
+    // ── Giro continuo sutil después de la entrada ──
+    let idleRotY = 0
+    let idleTiltX = 0
+    if (entryProgress >= 1) {
+      const idleT = t - ENTER_DURATION
+      idleRotY = idleT * IDLE_SPEED
+      idleTiltX = Math.sin(idleT * 0.4) * 0.03
+    }
+
+    groupRef.current.rotation.y = entryRotY + idleRotY
+    groupRef.current.rotation.x = idleTiltX
   })
 
   return (
@@ -77,16 +92,17 @@ function CanMini({ glbUrl, scale = 0.85 }: { glbUrl: string; scale?: number }) {
 interface MiniCanProps {
   glbUrl: string
   scale?: number
+  cameraZ?: number
 }
 
-export function MiniCan({ glbUrl, scale = 0.85 }: MiniCanProps) {
+export function MiniCan({ glbUrl, scale = 0.85, cameraZ = 3.5 }: MiniCanProps) {
   const isMobile = window.innerWidth < 768
   const dpr = Math.min(window.devicePixelRatio * (isMobile ? 1.2 : 2), isMobile ? 2 : 4)
 
   return (
     <Canvas
       id="mini-can-canvas"
-      camera={{ position: [0, 0, 3.5], fov: 45 }}
+      camera={{ position: [0, 0, cameraZ], fov: 45 }}
       gl={{
         antialias: true,
         alpha: true,

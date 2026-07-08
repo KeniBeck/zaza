@@ -1,6 +1,7 @@
 import { WHATSAPP_URL } from "../../constants"
 import { FaInstagram, FaWhatsapp, FaRegEnvelope } from "react-icons/fa"
 import { SocialLink } from "../shared/SocialLink"
+import { ContactoBackground } from "../shared/ContactoBackground"
 
 interface ContactoProps {
   gradientStart?: string
@@ -13,12 +14,12 @@ interface ContactoProps {
 
 export function Contacto({
   gradientStart = "#6B318B",
+  gradientMid = "#A855F7",
+  gradientEnd = "#A03B90",
   bgLight = "#F3E8FF",
 }: ContactoProps) {
   const iconStyle: React.CSSProperties = {
-    color: "#1a0a2e",
-    fontSize: "46px",
-    filter: `drop-shadow(0 0 8px ${gradientStart}) drop-shadow(0 0 20px ${gradientStart}cc) drop-shadow(0 0 40px ${gradientStart}66)`,
+    color: gradientStart,
     stroke: `${gradientStart}`,
     strokeWidth: "1",
     transition: "all 0.3s ease",
@@ -27,23 +28,29 @@ export function Contacto({
   return (
     <section
       id="contacto"
-      className="relative w-full flex flex-col items-center py-10"
-      style={{ backgroundColor: bgLight }}
+      className="relative w-full flex flex-col items-center py-10 overflow-hidden"
     >
+      <ContactoBackground
+        gradientStart={gradientStart}
+        gradientMid={gradientMid}
+        gradientEnd={gradientEnd}
+        bgLight={bgLight}
+      />
+
       <div className="relative z-10 flex flex-col items-center gap-8 w-full max-w-sm">
 
-        <h2 className="text-center" style={{ fontSize: "38px", fontWeight: 900, lineHeight: 1, color: "#1a0a2e", letterSpacing: "-1px" }}>
+        <h2 className="text-center" style={{ fontSize: "38px", fontWeight: 900, lineHeight: 1, color: gradientStart, letterSpacing: "-1px" }}>
           <span
+            className="md:text-6xl"
             style={{
               fontFamily: "var(--font-zaza)",
-              fontSize: "44px",
             }}
           >
             Súmate al  parche.
           </span>
         </h2>
 
-        <div className="flex items-center justify-center gap-8 w-full">
+        <div className="flex items-center justify-center gap-8 w-full text-[46px] md:text-6xl">
           <SocialLink href="https://instagram.com/zaza.latam" label="Instagram @zaza.latam" gradientStart={gradientStart}>
             <FaInstagram style={iconStyle} />
           </SocialLink>
