@@ -50,7 +50,7 @@ export function QuienesSomos({
 
       <div className="relative z-10 w-full flex flex-col items-center">
         <div className="md:hidden flex flex-col items-start gap-6 w-full max-w-sm">
-          <p className="font-sans text-xs tracking-[4px] uppercase font-semibold" style={{ color: gradientEnd }}>
+          <p className="font-zaza text-4xl tracking-[4px] mt-2" style={{ color: gradientEnd }}>
             ¿Quiénes somos?
           </p>
 
@@ -88,11 +88,10 @@ export function QuienesSomos({
             Porque la vida sabe mejor cuando se vive a tu manera.
           </p>
 
-          <div className="flex items-center gap-3 w-full">
-            <span className="text-[11px] tracking-[3px] uppercase font-semibold" style={{ color: `${gradientEnd}80` }}>
+          <div className="flex items-center justify-center w-full">
+            <span className="font-zaza text-3xl tracking-[3px]" style={{ color: `${gradientEnd}80` }}>
               Galería
             </span>
-            <div className="flex-1 h-px" style={{ background: `${gradientEnd}20` }} />
           </div>
 
           <InstagramGrid

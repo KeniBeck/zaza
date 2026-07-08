@@ -220,11 +220,23 @@ export function ColaboradoresDesktop({
         </p>
       </div>
       <div
-        className="flex-1 min-w-0 self-center"
+        className="flex-1 min-w-0 text-center"
         style={{
           maxWidth: desktopClamp("450px", "60vw + 200px", "1400px"),
         }}
       >
+        <p
+          className="font-zaza"
+          style={{
+            fontSize: desktopClamp("2rem", "1.5rem + 1vw", "2.8rem"),
+            color: gradientEnd,
+            textShadow: `0 0 6px ${gradientStart}50, 0 0 14px ${gradientStart}25`,
+            WebkitTextStroke: `0.5px ${gradientStart}60`,
+            letterSpacing: "0.02em",
+          }}
+        >
+          el parche
+        </p>
         <div
           className="grid grid-cols-3"
           style={{ gap: desktopClamp("0.75rem", "0.5rem + 0.5vw", "1.5rem") }}
