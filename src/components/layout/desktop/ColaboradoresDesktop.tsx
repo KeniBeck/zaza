@@ -134,7 +134,6 @@ function PosterCard({ colaborador, gradientEnd }: { colaborador: Colaborador; gr
 
 export function ColaboradoresDesktop({
   gradientStart,
-  gradientMid,
   gradientEnd,
   glbUrl,
   canvasMounted,

@@ -5,7 +5,7 @@ interface SocialLinkProps {
   children: React.ReactNode
 }
 
-export function SocialLink({ href, label, gradientStart, children }: SocialLinkProps) {
+export function SocialLink({ href, label, children }: SocialLinkProps) {
   return (
     <a
       href={href}
