@@ -6,7 +6,7 @@ import { ErrorBoundary } from "../components/shared/ErrorBoundary"
 import { Navbar } from "../components/layout/Navbar"
 import { About } from "../components/layout/About"
 import { Sabores } from "../components/layout/Sabores"
-import { QuienesSomos } from "../components/layout/mobile/QuienesSomos"
+import { Emprender } from "../components/layout/mobile/Emprender"
 import { Colaboradores } from "../components/layout/mobile/Colaboradores"
 import { Contacto } from "../components/layout/Contacto"
 import { ZazaLogo } from "../components/shared/ZazaLogo"
@@ -196,11 +196,11 @@ export function Home({ bgColor }: HomeProps) {
           isFlipped={isFlipped}
           onFlip={setIsFlipped}
         />
-        <QuienesSomos
+        <Emprender
           gradientStart={activeFlavor.color}
           gradientMid={activeFlavor.gradientMid}
           gradientEnd={activeFlavor.gradientEnd}
-          nosotrosBg={activeFlavor.nosotrosBg}
+          emprenderBg={activeFlavor.emprenderBg}
         />
         <Colaboradores
           gradientStart={activeFlavor.color}

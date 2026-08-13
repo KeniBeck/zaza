@@ -4,7 +4,7 @@ import { StoryProgress } from "./StoryProgress"
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi"
 
 const STORIES = Array.from({ length: 6 }, (_, i) => ({
-  src: asset(`/image/nosotros/galeria-${i + 1}.webp`),
+  src: asset(`/image/emprender/galeria-${i + 1}.webp`),
   caption: "Así se viven nuestros momentos.",
   tag: "#SaborQueSeVive",
 }))

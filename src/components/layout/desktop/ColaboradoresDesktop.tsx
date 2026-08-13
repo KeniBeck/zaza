@@ -4,6 +4,19 @@ import { MiniCan } from "../../scene/MiniCan"
 import { COLABORADORES, type Colaborador } from "../../../data/colaboradores"
 import { asset } from "../../../constants"
 
+function lightenHex(hex: string, amount = 0.45): string {
+  const h = hex.replace("#", "")
+  const full = h.length === 3 ? h.split("").map((c) => c + c).join("") : h
+  const num = parseInt(full, 16)
+  const r = (num >> 16) & 255
+  const g = (num >> 8) & 255
+  const b = num & 255
+  const lr = Math.round(r + (255 - r) * amount)
+  const lg = Math.round(g + (255 - g) * amount)
+  const lb = Math.round(b + (255 - b) * amount)
+  return `#${((1 << 24) + (lr << 16) + (lg << 8) + lb).toString(16).slice(1)}`
+}
+
 interface ColaboradoresDesktopProps {
   gradientStart: string
   gradientMid: string
@@ -41,12 +54,10 @@ function PosterCard({ colaborador, gradientEnd }: { colaborador: Colaborador; gr
       ref={cardRef}
       role="article"
       tabIndex={0}
-      className="relative rounded-[20px] overflow-hidden cursor-pointer outline-none transition-all duration-300 ease-out"
+      className="relative cursor-pointer outline-none transition-all duration-300 ease-out"
       style={{
         aspectRatio: "3/4",
-        border: `1px solid ${gradientEnd}30`,
         transform: hovered ? "scale(1.03)" : "scale(1)",
-        boxShadow: hovered ? `0 8px 32px ${gradientEnd}30, 0 0 60px ${gradientEnd}15` : "0 4px 12px rgba(0,0,0,0.2)",
       }}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
@@ -57,75 +68,102 @@ function PosterCard({ colaborador, gradientEnd }: { colaborador: Colaborador; gr
       <img
         src={asset(colaborador.foto)}
         alt={colaborador.nombre}
-        className="absolute inset-0 w-full h-full object-cover"
+        className="absolute inset-0 w-full h-full object-cover transition-transform duration-[600ms] ease-out"
+        style={{
+          WebkitMaskImage: [
+            "linear-gradient(to bottom, transparent 0%, black 12%, black 82%, transparent 100%)",
+            "linear-gradient(to right, transparent 0%, black 12%, black 88%, transparent 100%)",
+          ].join(", "),
+          WebkitMaskComposite: "source-in",
+          maskImage: [
+            "linear-gradient(to bottom, transparent 0%, black 12%, black 82%, transparent 100%)",
+            "linear-gradient(to right, transparent 0%, black 12%, black 88%, transparent 100%)",
+          ].join(", "),
+          maskComposite: "intersect",
+          transform: hovered ? "scale(1.05)" : "scale(1)",
+        }}
         loading="lazy"
         decoding="async"
       />
 
       <div
-        className="absolute inset-0 pointer-events-none"
+        className="absolute inset-0 pointer-events-none transition-opacity duration-300 ease-out"
         style={{
-          background: "linear-gradient(to top, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.45) 25%, rgba(0,0,0,0.1) 50%, transparent 70%)",
+          background: revealed || hovered
+            ? "linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.7) 45%, rgba(0,0,0,0.3) 75%, transparent 100%)"
+            : "linear-gradient(to top, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.35) 40%, transparent 70%)",
+          WebkitMaskImage: [
+            "linear-gradient(to bottom, transparent 0%, black 12%, black 82%, transparent 100%)",
+            "linear-gradient(to right, transparent 0%, black 12%, black 88%, transparent 100%)",
+          ].join(", "),
+          WebkitMaskComposite: "source-in",
+          maskImage: [
+            "linear-gradient(to bottom, transparent 0%, black 12%, black 82%, transparent 100%)",
+            "linear-gradient(to right, transparent 0%, black 12%, black 88%, transparent 100%)",
+          ].join(", "),
+          maskComposite: "intersect",
         }}
       />
 
       <div
-        className="absolute bottom-0 left-0 right-0 backdrop-blur-sm bg-black/20 rounded-b-[20px] overflow-hidden"
+        className="absolute bottom-0 left-0 right-0 flex flex-col"
+        style={{ padding: `0 ${desktopClamp("0.75rem", "0.5rem + 0.4vw", "1.5rem")} ${desktopClamp("0.5rem", "0.4rem + 0.3vw", "1rem")}` }}
       >
-        <div className="absolute top-0 left-4 right-4 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent rounded-full" />
+        <p
+          className="font-black text-white leading-tight"
+          style={{
+            fontSize: desktopClamp("1.1rem", "0.8rem + 0.5vw", "1.5rem"),
+            textShadow: "0 2px 12px rgba(0,0,0,0.6)",
+          }}
+        >
+          {colaborador.nombre}
+        </p>
+        <p
+          className="font-semibold uppercase tracking-[1.5px]"
+          style={{
+            fontSize: desktopClamp("0.6rem", "0.42rem + 0.25vw", "0.8rem"),
+            color: lightenHex(gradientEnd, 0.5),
+            textShadow: `0 1px 6px rgba(0,0,0,0.9), 0 3px 14px ${gradientEnd}`,
+          }}
+        >
+          {colaborador.rol}
+        </p>
 
         <div
-          className="flex flex-col"
-          style={{ padding: desktopClamp("1.25rem", "0.75rem + 0.8vw", "2rem") }}
+          className="overflow-hidden transition-all duration-[400ms] ease-out"
+          style={{
+            maxHeight: revealed ? "200px" : "0",
+            opacity: revealed ? 1 : 0,
+            marginTop: revealed ? "0.5rem" : "0",
+          }}
         >
+          <div className="w-6 h-px mb-2" style={{ background: `${gradientEnd}50` }} />
           <p
-            className="font-black text-white leading-tight"
-            style={{ fontSize: desktopClamp("1.25rem", "0.85rem + 0.6vw", "1.65rem") }}
-          >
-            {colaborador.nombre}
-          </p>
-          <p
-            className="font-semibold uppercase tracking-[1.5px]"
+            className="font-normal leading-relaxed text-white/70"
             style={{
-              fontSize: desktopClamp("0.7rem", "0.45rem + 0.3vw", "0.85rem"),
-              color: gradientEnd,
+              fontSize: desktopClamp("0.85rem", "0.55rem + 0.4vw", "1rem"),
+              textShadow: "0 2px 8px rgba(0,0,0,0.6)",
             }}
           >
-            {colaborador.rol}
+            {colaborador.descripcion}
           </p>
-
-          <div
-            className="overflow-hidden transition-all duration-[400ms] ease-out"
-            style={{
-              maxHeight: revealed ? "200px" : "0",
-              opacity: revealed ? 1 : 0,
-              marginTop: revealed ? "0.5rem" : "0",
-            }}
+          <a
+            href={`https://instagram.com/${colaborador.instagram}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 mt-2"
+            onClick={(e) => e.stopPropagation()}
+            style={{ textShadow: "0 2px 8px rgba(0,0,0,0.6)" }}
           >
-            <div className="w-6 h-px mb-2" style={{ background: `${gradientEnd}50` }} />
-            <p
-              className="font-normal leading-relaxed text-white/65"
-              style={{ fontSize: desktopClamp("0.9rem", "0.6rem + 0.5vw", "1.05rem") }}
-            >
-              {colaborador.descripcion}
-            </p>
-            <a
-              href={`https://instagram.com/${colaborador.instagram}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 mt-2"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <img
-                src={asset("/decor/ig.png")}
-                alt="Instagram"
-                className="w-3.5 h-3.5"
-              />
-              <span className="text-[10px] font-medium tracking-tight text-white/40 hover:text-white/70 transition-colors">
-                @{colaborador.instagram}
-              </span>
-            </a>
-          </div>
+            <img
+              src={asset("/decor/ig.png")}
+              alt="Instagram"
+              className="w-3.5 h-3.5"
+            />
+            <span className="text-[10px] font-medium tracking-tight text-white/40 hover:text-white/70 transition-colors">
+              @{colaborador.instagram}
+            </span>
+          </a>
         </div>
       </div>
     </div>

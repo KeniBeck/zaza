@@ -6,7 +6,7 @@ import { smoothScrollTo } from "../../utils/scroll"
 const NAV_LINKS = [
   { label: "Inicio", href: "#inicio" },
   { label: "Productos", href: "#productos" },
-  { label: "Nosotros", href: "#nosotros" },
+  { label: "Emprende", href: "#emprender" },
   { label: "Colaboradores", href: "#colaboradores" },
   { label: "Contacto", href: "#contacto" },
 ]
@@ -23,16 +23,21 @@ export function Navbar({ borderColor = "#722f96", color = "#6B318B", gradientEnd
 
   useEffect(() => {
     const handleScroll = () => {
-      const scrollY = window.scrollY + 120
+      const vh = window.innerHeight
+      const trigger = window.scrollY + vh * 0.2
       let current = "inicio"
 
       for (const link of NAV_LINKS) {
         const el = document.getElementById(link.href.slice(1))
-        if (el && el.offsetTop <= scrollY) {
-          current = el.id
+        if (el) {
+          const top = el.getBoundingClientRect().top + window.scrollY
+          if (top <= trigger) {
+            current = el.id
+          }
         }
       }
 
+      // La última sección (contacto) es el final del documento.
       if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 50) {
         current = "contacto"
       }
@@ -41,12 +46,20 @@ export function Navbar({ borderColor = "#722f96", color = "#6B318B", gradientEnd
     }
 
     handleScroll()
-    window.addEventListener("scroll", handleScroll, { passive: true })
-    window.addEventListener("resize", handleScroll, { passive: true })
+    const events = ["scroll", "resize"]
+    events.forEach((ev) => window.addEventListener(ev, handleScroll, { passive: true }))
+
+    // Las secciones se montan después del preload; recalcula cuando aparezcan.
+    let alive = true
+    const poll = setInterval(() => {
+      if (!alive) return
+      if (NAV_LINKS.some((l) => document.getElementById(l.href.slice(1)))) handleScroll()
+    }, 400)
 
     return () => {
-      window.removeEventListener("scroll", handleScroll)
-      window.removeEventListener("resize", handleScroll)
+      alive = false
+      clearInterval(poll)
+      events.forEach((ev) => window.removeEventListener(ev, handleScroll))
     }
   }, [])
 
