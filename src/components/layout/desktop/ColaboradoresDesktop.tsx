@@ -229,7 +229,7 @@ export function ColaboradoresDesktop({
             style={{
               flex: 1,
               height: desktopClamp("200px", "140px + 10vw", "340px"),
-              overflow: "visible",
+              overflow: "hidden",
               position: "relative",
             }}
           >

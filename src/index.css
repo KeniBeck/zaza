@@ -20,6 +20,14 @@
   100% { transform: translateX(200%); }
 }
 
+h1 { font-size: inherit; }
+
+html,
+body,
+#root {
+  overflow-x: hidden;
+}
+
 #scene-canvas,
 #scene-canvas * {
   pointer-events: none !important;
