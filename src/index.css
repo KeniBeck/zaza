@@ -25,6 +25,12 @@
   pointer-events: none !important;
 }
 
+#mini-can-canvas,
+#mini-can-canvas * {
+  pointer-events: none !important;
+  touch-action: pan-y !important;
+}
+
 @property --angle {
   syntax: '<angle>';
   initial-value: 0deg;

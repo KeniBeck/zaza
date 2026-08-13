@@ -112,7 +112,8 @@ export function MiniCan({ glbUrl, scale = 0.85, cameraZ = 3.5 }: MiniCanProps) {
       dpr={dpr}
       style={{
         background: "transparent",
-        touchAction: "none",
+        touchAction: "pan-y",
+        pointerEvents: "none",
         width: "100%",
         height: "100%",
         display: "block",
