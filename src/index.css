@@ -28,6 +28,11 @@ body,
   overflow-x: hidden;
 }
 
+html,
+body {
+  background-color: #F3E8FF;
+}
+
 #scene-canvas,
 #scene-canvas * {
   pointer-events: none !important;
