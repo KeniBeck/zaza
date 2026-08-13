@@ -11,7 +11,7 @@ interface GalleryImageProps {
 
 export function GalleryImage({ index, gradientStart, gradientEnd, onClick, className = "" }: GalleryImageProps) {
   const [errored, setErrored] = useState(false)
-  const src = asset(`/image/nosotros/galeria-${index + 1}.webp`)
+  const src = asset(`/image/emprender/galeria-${index + 1}.webp`)
 
   if (errored) {
     return (

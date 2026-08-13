@@ -39,7 +39,7 @@ export function Contacto({
 
       <div className="relative z-10 flex flex-col items-center gap-8 w-full max-w-sm">
 
-        <h2 className="text-center" style={{ fontSize: "38px", fontWeight: 900, lineHeight: 1, color: gradientStart, letterSpacing: "-1px" }}>
+        <h2 className="text-center" style={{ fontSize: "38px", fontWeight: 400, lineHeight: 1, color: gradientStart, letterSpacing: "-1px" }}>
           <span
             className="md:text-6xl"
             style={{

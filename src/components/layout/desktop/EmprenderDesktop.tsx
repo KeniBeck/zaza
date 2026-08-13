@@ -1,13 +1,15 @@
 import { desktopClamp } from "../../../hooks/useScreenSize"
 import { GallerySlider } from "./GallerySlider"
+import { FaWhatsapp, FaPaperPlane } from "react-icons/fa"
+import { WHATSAPP_URL } from "../../../constants"
 
-interface QuienesSomosDesktopProps {
+interface EmprenderDesktopProps {
   gradientStart: string
   gradientEnd: string
   onImageClick: (index: number) => void
 }
 
-export function QuienesSomosDesktop({ gradientStart, gradientEnd, onImageClick }: QuienesSomosDesktopProps) {
+export function EmprenderDesktop({ gradientStart, gradientEnd, onImageClick }: EmprenderDesktopProps) {
   return (
     <div
       className="flex items-start justify-center"
@@ -32,7 +34,7 @@ export function QuienesSomosDesktop({ gradientStart, gradientEnd, onImageClick }
             letterSpacing: "0.02em",
           }}
         >
-          ¿Quiénes somos?
+          ¿Quieres asociarte con Zaza?
         </p>
 
         <h2
@@ -42,7 +44,7 @@ export function QuienesSomosDesktop({ gradientStart, gradientEnd, onImageClick }
             letterSpacing: "-1px",
           }}
         >
-          Somos<br />
+          Emprende<br />
           <span
             className="font-zaza"
             style={{
@@ -51,7 +53,7 @@ export function QuienesSomosDesktop({ gradientStart, gradientEnd, onImageClick }
               WebkitTextStroke: `1px ${gradientStart}`,
             }}
           >
-            parche.
+            con zaza.
           </span>
         </h2>
 
@@ -67,13 +69,12 @@ export function QuienesSomosDesktop({ gradientStart, gradientEnd, onImageClick }
             className="leading-relaxed text-white/75"
             style={{ fontSize: desktopClamp("0.9rem", "0.6rem + 0.5vw", "1.05rem") }}
           >
-            Nacimos para acompañar esos momentos que{" "}
+            Aquí nos enfocamos en darte{" "}
             <strong className="font-bold" style={{ color: gradientEnd }}>
-              no se planean
+              la facilidad
             </strong>{" "}
-            pero terminan siendo los mejores. Creamos bebidas con sabor,
-            actitud y la energía necesaria para convertir cualquier ocasión
-            en una buena historia.
+            para llevar Zaza a tu negocio, convertirte en nuestro socio comercial y generar ingresos con nuestros productos.
+            No importa si tienes una tienda, un bar, un pequeño negocio, una unidad residencial o estás buscando una nueva oportunidad para crecer. Queremos que Zaza sea parte de tu negocio.
           </p>
         </div>
 
@@ -85,8 +86,35 @@ export function QuienesSomosDesktop({ gradientStart, gradientEnd, onImageClick }
             paddingLeft: desktopClamp("0.75rem", "0.5rem + 0.4vw", "1rem"),
           }}
         >
-          Porque la vida sabe mejor cuando se vive a tu manera.
+          Escríbenos ahora y haz parte de esto.
+          Te queremos apoyar, queremos {" "}
+          <strong className="font-bold" style={{ color: gradientEnd }}>
+            crecer contigo
+          </strong>{" "}
         </p>
+
+        <div className="flex flex-wrap items-center gap-3">
+          <a
+            href={WHATSAPP_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="WhatsApp"
+            className="inline-flex items-center justify-center rounded-xl px-5 py-2.5 text-white"
+            style={{ background: `linear-gradient(to right, ${gradientStart}, ${gradientEnd})` }}
+          >
+            <FaWhatsapp size={20} />
+          </a>
+          <a
+            href="https://www.instagram.com/zaza.latam"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Enviar mensaje por Instagram"
+            className="inline-flex items-center justify-center rounded-xl border px-5 py-2.5 text-white/90 hover:bg-white/10 transition-colors"
+            style={{ borderColor: `${gradientEnd}60` }}
+          >
+            <FaPaperPlane size={18} />
+          </a>
+        </div>
       </div>
 
       <div

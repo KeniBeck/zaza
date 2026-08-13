@@ -1,23 +1,25 @@
 import { useState, useCallback } from "react"
+import { FaWhatsapp, FaPaperPlane } from "react-icons/fa"
 import { BackgroundBlobs } from "../../shared/BackgroundBlobs"
 import { BubbleSvg } from "../../shared/BubbleSvg"
 import { InstagramGrid } from "../../stories/InstagramGrid"
 import { StoryModal } from "../../stories/StoryModal"
-import { QuienesSomosDesktop } from "../desktop/QuienesSomosDesktop"
+import { EmprenderDesktop } from "../desktop/EmprenderDesktop"
+import { WHATSAPP_URL } from "../../../constants"
 
-interface QuienesSomosProps {
+interface EmprenderProps {
   gradientStart?: string
   gradientMid?: string
   gradientEnd?: string
-  nosotrosBg?: string
+  emprenderBg?: string
 }
 
-export function QuienesSomos({
+export function Emprender({
   gradientStart = "#6B318B",
   gradientMid = "#A855F7",
   gradientEnd = "#C084FC",
-  nosotrosBg = "linear-gradient(160deg, #2a0d3a 0%, #3d1560 100%)",
-}: QuienesSomosProps) {
+  emprenderBg = "linear-gradient(160deg, #2a0d3a 0%, #3d1560 100%)",
+}: EmprenderProps) {
   const [viewerOpen, setViewerOpen] = useState(false)
   const [activeStory, setActiveStory] = useState(0)
 
@@ -31,10 +33,10 @@ export function QuienesSomos({
   }, [])
 
   return (
-    <section id="nosotros" className="relative min-h-screen w-full flex flex-col items-center justify-center px-5 py-24 overflow-hidden">
+    <section id="emprender" className="relative min-h-screen w-full flex flex-col items-center justify-center px-5 py-24 overflow-hidden">
       <div
         className="absolute inset-0 pointer-events-none"
-        style={{ background: nosotrosBg }}
+        style={{ background: emprenderBg }}
       >
         <BackgroundBlobs
           gradientStart={gradientStart}
@@ -51,11 +53,11 @@ export function QuienesSomos({
       <div className="relative z-10 w-full flex flex-col items-center">
         <div className="md:hidden flex flex-col items-start gap-6 w-full max-w-sm">
           <p className="font-zaza text-4xl tracking-[4px] mt-2" style={{ color: gradientEnd }}>
-            ¿Quiénes somos?
+            ¿Quieres asociarte con Zaza?
           </p>
 
           <h2 style={{ fontSize: "52px", fontWeight: 900, lineHeight: 1, color: "#fff", letterSpacing: "-1px" }}>
-            Somos<br />
+            Emprende<br />
             <span
               style={{
                 textShadow: `0 0 8px ${gradientStart}, 0 0 20px ${gradientStart}, 0 0 40px ${gradientStart}`,
@@ -64,7 +66,7 @@ export function QuienesSomos({
                 fontSize: "62px",
               }}
             >
-              parche.
+              con zaza.
             </span>
           </h2>
 
@@ -74,19 +76,47 @@ export function QuienesSomos({
           >
             <div className="absolute top-0 left-4 right-4 h-px bg-gradient-to-r from-transparent via-white/40 to-transparent rounded-full" />
             <p className="text-sm leading-relaxed text-white/75">
-              Nacimos para acompañar esos momentos que{" "}
+              Aquí nos enfocamos en darte{" "}
               <strong className="font-bold" style={{ color: gradientEnd }}>
-                no se planean
+                la facilidad
               </strong>{" "}
-              pero terminan siendo los mejores. Creamos bebidas con sabor,
-              actitud y la energía necesaria para convertir cualquier ocasión
-              en una buena historia.
+              para llevar Zaza a tu negocio, convertirte en nuestro socio comercial y generar ingresos con nuestros productos.
+                 {" "} <strong className="font-bold" style={{ color: gradientEnd }}>
+                No importa
+              </strong>{" "}si tienes una tienda, un bar, un pequeño negocio, una unidad residencial o estás buscando una nueva oportunidad para crecer. Queremos que Zaza sea parte de tu negocio.
             </p>
           </div>
 
           <p className="text-base font-bold text-white leading-snug pl-4" style={{ borderLeft: `3px solid ${gradientEnd}` }}>
-            Porque la vida sabe mejor cuando se vive a tu manera.
+            Escríbenos ahora y haz parte de esto.
+            Te queremos apoyar, queremos {" "}
+            <strong className="font-bold" style={{ color: gradientEnd }}>
+              crecer contigo
+            </strong>{" "}
           </p>
+
+          <div className="flex flex-wrap items-center gap-3 w-full">
+            <a
+              href={WHATSAPP_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="WhatsApp"
+              className="flex items-center justify-center rounded-xl px-4 py-2 text-white"
+              style={{ background: `linear-gradient(to right, ${gradientStart}, ${gradientEnd})` }}
+            >
+              <FaWhatsapp size={18} />
+            </a>
+            <a
+              href="https://www.instagram.com/zaza.latam"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Enviar mensaje por Instagram"
+              className="inline-flex items-center justify-center rounded-xl border px-4 py-2 text-white/90 hover:bg-white/10 transition-colors"
+              style={{ borderColor: `${gradientEnd}60` }}
+            >
+              <FaPaperPlane size={16} />
+            </a>
+          </div>
 
           <div className="flex items-center justify-center w-full">
             <span className="font-zaza text-3xl tracking-[3px]" style={{ color: `${gradientEnd}80` }}>
@@ -102,7 +132,7 @@ export function QuienesSomos({
         </div>
 
         <div className="hidden md:block w-full">
-          <QuienesSomosDesktop
+          <EmprenderDesktop
             gradientStart={gradientStart}
             gradientEnd={gradientEnd}
             onImageClick={handleImageClick}
