@@ -56,6 +56,38 @@ export function Home({ bgColor }: HomeProps) {
   const heroThreshold = useMemo(() => window.innerHeight, [])
 
   useEffect(() => {
+    const meta = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]')
+    const SECTION_ORDER = ["inicio", "productos", "emprender", "colaboradores", "contacto"]
+    const sectionColor = (id: string): string => {
+      if (id === "inicio" || id === "contacto") return activeFlavor.bgLight
+      return activeFlavor.color
+    }
+
+    const updateThemeColor = () => {
+      if (!meta) return
+      const trigger = window.scrollY + window.innerHeight * 0.15
+      let current = "inicio"
+      for (const id of SECTION_ORDER) {
+        const el = document.getElementById(id)
+        if (el) {
+          const top = el.getBoundingClientRect().top + window.scrollY
+          if (top <= trigger) current = id
+        }
+      }
+      meta.setAttribute("content", sectionColor(current))
+    }
+
+    updateThemeColor()
+    window.addEventListener("scroll", updateThemeColor, { passive: true })
+    window.addEventListener("resize", updateThemeColor, { passive: true })
+
+    return () => {
+      window.removeEventListener("scroll", updateThemeColor)
+      window.removeEventListener("resize", updateThemeColor)
+    }
+  }, [activeFlavor])
+
+  useEffect(() => {
     if (!modelReady) return
 
     const applyCanvasStyle = () => {
