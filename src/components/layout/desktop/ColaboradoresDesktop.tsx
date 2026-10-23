@@ -67,7 +67,7 @@ function PosterCard({ colaborador, gradientEnd }: { colaborador: Colaborador; gr
     >
       <img
         src={asset(colaborador.foto)}
-        alt={colaborador.nombre}
+        alt={`${colaborador.nombre}, ${colaborador.rol} de ZAZA`}
         className="absolute inset-0 w-full h-full object-cover transition-transform duration-[600ms] ease-out"
         style={{
           WebkitMaskImage: [

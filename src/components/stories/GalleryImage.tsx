@@ -9,6 +9,15 @@ interface GalleryImageProps {
   className?: string
 }
 
+const ALT_TEXT = [
+  "Latas de cócteles artesanales ZAZA con frutas frescas",
+  "Amigos brindando con cócteles ZAZA",
+  "Manos sosteniendo latas de ZAZA de distintos sabores",
+  "Personas disfrutando cócteles ZAZA en un bar",
+  "Cóctel ZAZA Lulay con lulo y hielo",
+  "Mujeres disfrutando cócteles ZAZA en una fiesta",
+]
+
 export function GalleryImage({ index, gradientStart, gradientEnd, onClick, className = "" }: GalleryImageProps) {
   const [errored, setErrored] = useState(false)
   const src = asset(`/image/emprender/galeria-${index + 1}.webp`)
@@ -35,7 +44,8 @@ export function GalleryImage({ index, gradientStart, gradientEnd, onClick, class
   return (
     <img
       src={src}
-      alt={`Galería ${index + 1}`}
+      alt={ALT_TEXT[index] ?? `Galería de cócteles ZAZA ${index + 1}`}
+      decoding="async"
       className={`aspect-square object-cover cursor-pointer transition-all duration-300 ease-out hover:scale-105 ${className}`}
       style={{
         border: index === 0 ? `2px dashed ${gradientEnd}30` : `1px solid ${gradientEnd}10`,
