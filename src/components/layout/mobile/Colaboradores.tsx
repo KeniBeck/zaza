@@ -38,7 +38,7 @@ function ColaboradorCard({ colaborador, gradientEnd }: {
         >
           <img
             src={asset(colaborador.foto)}
-            alt={colaborador.nombre}
+            alt={`${colaborador.nombre}, ${colaborador.rol} de ZAZA`}
             className="w-full h-full object-cover"
             loading="lazy"
             decoding="async"

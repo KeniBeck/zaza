@@ -167,28 +167,27 @@ export function Home({ bgColor }: HomeProps) {
   const isMobile = window.innerWidth < 768
   const deviceDpr = window.devicePixelRatio
 
-  if (!modelReady) {
-    return (
-      <>
-        <Suspense fallback={null}>
-          <Preloader onReady={() => setModelReady(true)} />
-        </Suspense>
-        <LoadingSplash />
-      </>
-    )
-  }
-
   return (
     <div className="relative w-full" style={{ backgroundColor: bgColor ?? activeFlavor.bgLight }}>
+      {!modelReady && (
+        <>
+          <Suspense fallback={null}>
+            <Preloader onReady={() => setModelReady(true)} />
+          </Suspense>
+          <LoadingSplash />
+        </>
+      )}
+
       <Navbar color={activeFlavor.color} gradientEnd={activeFlavor.gradientEnd} borderColor={activeFlavor.color} />
 
-      <ErrorBoundary key={canvasKey} onError={handleCanvasError}>
-        <div
-          id="scene-canvas"
-          className="z-40 pointer-events-none"
-          style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0 }}
-        >
-          <Canvas
+      {modelReady && (
+        <ErrorBoundary key={canvasKey} onError={handleCanvasError}>
+          <div
+            id="scene-canvas"
+            className="z-40 pointer-events-none"
+            style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0 }}
+          >
+            <Canvas
             key={canvasKey}
             camera={{ position: [0, 0.05, 4], fov: 45 }}
             gl={{ antialias: true, alpha: true, precision: "highp", powerPreference: "high-performance", logarithmicDepthBuffer: true }}
@@ -210,8 +209,9 @@ export function Home({ bgColor }: HomeProps) {
               isFlipped={isFlipped}
             />
           </Canvas>
-        </div>
-      </ErrorBoundary>
+          </div>
+        </ErrorBoundary>
+      )}
 
       <div className="relative z-10">
         <section id="inicio" className="min-h-screen flex flex-col items-center">
