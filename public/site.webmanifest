@@ -1,7 +1,7 @@
 {
-  "name": "ZAZA — Cócteles artesanales colombianos",
+  "name": "ZAZA — Cócteles con sabores únicos",
   "short_name": "ZAZA",
-  "description": "Cócteles artesanales colombianos con sabores únicos.",
+  "description": "Cócteles con sabores únicos.",
   "lang": "es-CO",
   "start_url": "/",
   "scope": "/",
@@ -20,7 +20,7 @@
       "type": "image/png"
     },
     {
-      "src": "/icon-512.png",
+      "src": "/icon-maskable-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"

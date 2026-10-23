@@ -24,6 +24,8 @@ export function About({
     return (
         <div className="relative min-h-screen w-full flex flex-col items-center pt-[25vh] overflow-hidden">
 
+            <h1 className="sr-only">ZAZA, cócteles con sabores únicos</h1>
+
             <SectionBackground
                 gradientStart={gradientStart}
                 gradientMid={gradientMid}

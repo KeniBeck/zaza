@@ -10,7 +10,7 @@ interface GalleryImageProps {
 }
 
 const ALT_TEXT = [
-  "Latas de cócteles artesanales ZAZA con frutas frescas",
+  "Latas de cócteles ZAZA con frutas frescas",
   "Amigos brindando con cócteles ZAZA",
   "Manos sosteniendo latas de ZAZA de distintos sabores",
   "Personas disfrutando cócteles ZAZA en un bar",
